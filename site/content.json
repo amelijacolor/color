@@ -64,6 +64,27 @@
   ],
   "projects": [
     {
+      "slug": "predator",
+      "title": "Predator",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "roles": [
+        "Cinematography"
+      ],
+      "poster": "assets/images/predator-cover-4228fdfe.png",
+      "preview": "assets/videos/predator-preview-a718f629.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/predator-clip-fd039923.mp4",
+        "assets/videos/predator-clip-a212b1df.mp4",
+        "assets/videos/predator-clip-b3396994.mp4",
+        "assets/videos/predator-clip-07f90678.mp4",
+        "assets/videos/predator-clip-fd264e9a.mp4"
+      ]
+    },
+    {
       "slug": "natural-order-of-things",
       "title": "Natural Order of Things",
       "format": "Short Film",
