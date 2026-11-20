@@ -431,6 +431,59 @@ h1, h2, h3, p { margin: 0; }
 }
 .compare-tab:hover, .compare-tab.is-active { color: var(--ink); }
 
+.selected-cta {
+  display: flex;
+  justify-content: center;
+  padding: clamp(44px, 7vh, 76px) var(--pad) 0;
+}
+.work-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 2px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition: color 0.45s var(--ease);
+}
+.work-cta::before,
+.work-cta::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+}
+.work-cta::before {
+  background: var(--line);
+}
+.work-cta::after {
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s var(--ease);
+}
+.work-cta-arrow {
+  display: inline-block;
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: transform 0.5s var(--ease);
+}
+.work-cta:hover,
+.work-cta:focus-visible {
+  color: var(--ink);
+}
+.work-cta:hover::after,
+.work-cta:focus-visible::after {
+  transform: scaleX(1);
+}
+.work-cta:hover .work-cta-arrow,
+.work-cta:focus-visible .work-cta-arrow {
+  transform: translateX(6px);
+}
+
 /* ---------- BAND ---------- */
 .band {
   background: var(--paper);
