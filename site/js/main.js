@@ -239,11 +239,11 @@ function initHero() {
    Home: before / after
    ========================================================================== */
 function cameraRoleIcon() {
-  return `<span class="role-icon" title="Cinematography" aria-label="Cinematography"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 8V6.2C5.5 5.5 6 5 6.7 5H12.3C13 5 13.5 5.5 13.5 6.2V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="2.2" y="8" width="13.8" height="10.5" rx="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="9.1" cy="13.25" r="2.2" stroke="currentColor" stroke-width="1.5"/><path d="M16 11.2L21.8 8.4V18.1L16 15.3V11.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>`;
+  return `<span class="role-icon is-camera" title="Cinematography" aria-label="Cinematography"><svg viewBox="0 0 22 14" fill="none" aria-hidden="true"><rect x="0.75" y="2.25" width="13.5" height="9.5" rx="1.1" stroke="currentColor" stroke-width="1.15"/><path d="M14.25 4.9L20.75 2.4V11.6L14.25 9.1" stroke="currentColor" stroke-width="1.15" stroke-linejoin="miter"/><circle cx="3.8" cy="5.2" r="0.85" fill="currentColor"/></svg></span>`;
 }
 
 function davinciRoleIcon() {
-  return `<span class="role-icon" title="Colour Grading" aria-label="Colour Grading"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="7.2" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="7.6" cy="15" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="16.4" cy="15" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="12" cy="12.4" r="1.2" fill="currentColor"/></svg></span>`;
+  return `<span class="role-icon is-davinci" title="Colour Grading" aria-label="Colour Grading"><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="3.2" r="2.25" stroke="currentColor" stroke-width="1.15"/><circle cx="3.7" cy="9.4" r="2.25" stroke="currentColor" stroke-width="1.15"/><circle cx="10.3" cy="9.4" r="2.25" stroke="currentColor" stroke-width="1.15"/></svg></span>`;
 }
 
 function renderCompareRoles(item) {
@@ -253,7 +253,7 @@ function renderCompareRoles(item) {
   const icons = [];
   if (hasCine) icons.push(cameraRoleIcon());
   if (hasColor || !hasCine) icons.push(davinciRoleIcon());
-  return icons.join("");
+  return icons.join(`<i class="role-sep" aria-hidden="true"></i>`);
 }
 
 function initCompare() {
@@ -579,7 +579,10 @@ function initContact() {
    ========================================================================== */
 function applyContent() {
   const about = $("#about-body");
-  if (about && CONTENT.about) about.textContent = CONTENT.about;
+  if (about && CONTENT.about) {
+    const paras = String(CONTENT.about).split(/\n+/).map((s) => s.trim()).filter(Boolean);
+    about.innerHTML = paras.map((p) => `<span class="about-p">${esc(p)}</span>`).join("");
+  }
   const aboutImg = $("#about-img");
   if (aboutImg && CONTENT.about_image) aboutImg.src = CONTENT.about_image;
   $$("[data-email]").forEach((el) => {

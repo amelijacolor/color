@@ -320,43 +320,10 @@ h1, h2, h3, p { margin: 0; }
 }
 .statement-sans { font-weight: 600; letter-spacing: -0.04em; color: var(--ink-2); }
 .statement-serif { font-family: var(--serif); letter-spacing: -0.03em; color: var(--ink); }
-.statement-row {
-  margin-top: clamp(60px, 10vh, 110px);
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-}
-.statement-logos {
-  padding-top: clamp(24px, 3.2vw, 34px);
-}
-.brand-logo {
-  display: inline-flex;
-  align-items: center;
-  color: #fff;
-  opacity: 0.84;
-  transition: opacity 0.35s var(--ease);
-}
-.brand-logo:hover {
-  opacity: 1;
-}
-.brand-logo svg {
-  display: block;
-  width: auto;
-  height: clamp(18px, 2.1vw, 25px);
-}
-.brand-logo .logo-arri {
-  height: clamp(16px, 1.85vw, 22px);
-}
-.brand-logo .logo-davinci {
-  height: clamp(20px, 2.3vw, 27px);
+.statement-rule {
+  margin-top: clamp(56px, 9vh, 104px);
+  height: 1px;
+  background: var(--line);
 }
 
 /* ---------- BEFORE / AFTER ---------- */
@@ -432,17 +399,34 @@ h1, h2, h3, p { margin: 0; }
   border-top: 1px solid var(--line);
 }
 .compare-tab {
+  position: relative;
   min-width: 0;
   text-align: left;
-  padding: clamp(12px, 1.5vw, 18px) clamp(12px, 1.8vw, 32px) 0;
+  padding: clamp(14px, 1.6vw, 20px) clamp(12px, 1.8vw, 32px) 4px;
   color: var(--ink-3);
-  transition: color 0.3s ease;
+  transition: color 0.35s var(--ease);
+}
+.compare-tab::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s var(--ease);
+}
+.compare-tab.is-active::before {
+  transform: scaleX(1);
 }
 .compare-tab + .compare-tab { border-left: 1px solid var(--line); }
 .compare-tab strong {
   display: block;
   font-weight: 500;
-  font-size: clamp(0.82rem, 1.2vw, 1.05rem);
+  font-size: clamp(0.82rem, 1.15vw, 1.02rem);
+  letter-spacing: -0.005em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -457,8 +441,8 @@ h1, h2, h3, p { margin: 0; }
 .compare-tab .compare-roles {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 7px;
+  gap: 9px;
+  margin-top: 9px;
   overflow: visible;
 }
 .role-icon {
@@ -466,17 +450,32 @@ h1, h2, h3, p { margin: 0; }
   align-items: center;
   justify-content: center;
   color: currentColor;
-  opacity: 0.82;
-  transition: opacity 0.3s ease;
+  opacity: 0.62;
+  transition: opacity 0.35s var(--ease);
 }
 .role-icon svg {
   display: block;
+  overflow: visible;
+}
+.role-icon.is-camera svg {
   width: 17px;
-  height: 17px;
+  height: 11px;
+}
+.role-icon.is-davinci svg {
+  width: 13px;
+  height: 13px;
+}
+.role-sep {
+  display: inline-block;
+  width: 1px;
+  height: 9px;
+  background: currentColor;
+  opacity: 0.24;
+  flex: none;
 }
 .compare-tab:hover .role-icon,
 .compare-tab.is-active .role-icon {
-  opacity: 1;
+  opacity: 0.95;
 }
 .compare-tab:hover, .compare-tab.is-active { color: var(--ink); }
 
@@ -579,7 +578,9 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: -0.02em;
   margin-bottom: 32px;
 }
-.about-body { max-width: 440px; font-size: 1rem; line-height: 1.65; color: var(--dark-2); }
+.about-body { max-width: 480px; font-size: 0.98rem; line-height: 1.7; color: var(--dark-2); }
+.about-p { display: block; }
+.about-p + .about-p { margin-top: 1.05em; }
 .about-links { margin-top: 36px; display: flex; gap: 32px; }
 .about-image { position: relative; overflow: hidden; min-height: 70vh; }
 .about-image img {
@@ -990,8 +991,6 @@ h1, h2, h3, p { margin: 0; }
   .about { min-height: auto; }
   .about-text { padding: 64px var(--pad) 52px; }
   .about-image { min-height: 110vw; }
-  .statement-row { flex-direction: column; text-align: center; }
-  .statement-logos { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 22px 32px; }
   .hero-frame { width: clamp(220px, 64vw, 330px); }
   .hero-meta {
     grid-template-columns: 1fr 1fr;
