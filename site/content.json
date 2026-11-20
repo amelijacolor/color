@@ -81,8 +81,8 @@
         "assets/videos/oculus-clip-ef60e6bf.mp4"
       ],
       "roles": [
-        "Cinematography",
-        "Colour Grading"
+        "Cinematographer",
+        "Colorist"
       ],
       "slug": "oculus",
       "title": "Oculus",
@@ -102,8 +102,8 @@
         "assets/videos/blood-gothika-clip-4e151d2b.mp4"
       ],
       "roles": [
-        "Cinematography",
-        "Colour Grading"
+        "Cinematographer",
+        "Colorist"
       ],
       "slug": "blood-gothika",
       "title": "Blood Gothika",
@@ -125,6 +125,7 @@
         "assets/videos/heartstealer-clip-6d1f4324.mp4"
       ],
       "roles": [
+        "Cinematographer",
         "Colorist"
       ],
       "slug": "heartstealer",
@@ -145,8 +146,8 @@
         "assets/videos/hygiene-is-not-a-luxury-clip-b4ab31be.mp4"
       ],
       "roles": [
-        "Cinematography",
-        "Colour Grading"
+        "Cinematographer",
+        "Colorist"
       ],
       "slug": "hygiene-is-not-a-luxury",
       "title": "Hygiene Is Not a Luxury",
@@ -195,8 +196,8 @@
         "assets/videos/touch-grass-clip-a1c1bf9e.mp4"
       ],
       "roles": [
-        "Cinematography",
-        "Colour Grading"
+        "Cinematographer",
+        "Colorist"
       ],
       "slug": "touch-grass",
       "title": "Touch Grass",
@@ -218,7 +219,7 @@
         "assets/videos/earplugs-from-space-clip-a66891a7.mp4"
       ],
       "roles": [
-        "Colour Grading"
+        "Colorist"
       ],
       "slug": "earplugs-from-space",
       "title": "Sets",
@@ -239,7 +240,7 @@
       ],
       "roles": [
         "Cinematography",
-        "Colour Grading"
+        "Colorist"
       ],
       "slug": "lucifer",
       "title": "Lucifer",
@@ -259,7 +260,7 @@
         "assets/videos/final-card-clip-6e3503a8.mp4"
       ],
       "roles": [
-        "Colour Grading"
+        "Colorist"
       ],
       "slug": "final-card",
       "title": "Final Card",
