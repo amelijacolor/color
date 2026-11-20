@@ -349,8 +349,8 @@
     const savedMeta = (() => {
       try { return JSON.parse(localStorage.getItem("ameli_gh_meta_v1") || "{}"); } catch (_) { return {}; }
     })();
-    const ownerIn = h("input", { type: "text", placeholder: "Your GitHub username (e.g. amelimor)", value: savedMeta.owner || "", autocomplete: "username" });
-    const repoIn = h("input", { type: "text", placeholder: "Repository name (e.g. portfolio)", value: savedMeta.repo || "" });
+    const ownerIn = h("input", { type: "text", placeholder: "amelijacolor", value: savedMeta.owner || "amelijacolor", autocomplete: "username" });
+    const repoIn = h("input", { type: "text", placeholder: "color", value: savedMeta.repo || "color" });
     const branchIn = h("input", { type: "text", placeholder: "main", value: savedMeta.branch || "main" });
     const tokenIn = h("input", { type: "password", placeholder: "github_pat_… (Fine-grained token)", autocomplete: "current-password" });
     const rememberIn = h("input", { type: "checkbox" });
