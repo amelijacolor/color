@@ -255,6 +255,8 @@
     if (!data.before_after || !data.before_after.length) throw new Error("Add at least 1 Before & After pair.");
     data.before_after.forEach((b, i) => {
       if (!b.title || !b.before || !b.after) throw new Error(`Before & After #${i + 1} needs a title, Log image, and Graded image.`);
+      b.roles = (b.roles || []).map((r) => String(r || "").trim()).filter(Boolean).slice(0, 4);
+      if (!b.roles.length) b.roles = ["Colorist"];
     });
     if (!data.projects || !data.projects.length) throw new Error("Add at least 1 film.");
     data.hero_slides = (data.hero_slides || [])
@@ -749,19 +751,47 @@
   }
 
   /* ----------------------------------------------------------- before/after */
+  function baHasRole(b, kind) {
+    const joined = (b.roles || []).join(" ");
+    return kind === "cine" ? /cinematograph|\bdop\b|\bdp\b/i.test(joined) : /colou?r|grad/i.test(joined);
+  }
+
   function baPanel(panel) {
     panel.append(h("p", { class: "hint", style: "margin-bottom:20px" },
-      "Pick 1–6 films. Upload the flat Log frame and the final graded frame — same crop and size, so the slider lines up perfectly."));
+      "Pick 1–6 films. Upload the flat Log frame and the final graded frame — same crop and size, so the slider lines up perfectly. Choose which role symbols (camera / DaVinci) appear under each title."));
     content.before_after.forEach((b, i) => {
       const slug = () => slugify(b.title || "grade");
-      panel.append(h("div", { class: "card" }, h("div", { class: "card-body", style: "border:0" },
-        h("div", { class: "row" }, textField("Film title", b, "title"), textField("Camera", b, "camera")),
+      if (!Array.isArray(b.roles) || !b.roles.length) b.roles = ["Colorist"];
+      const hasCine = baHasRole(b, "cine");
+      const hasColor = baHasRole(b, "color");
+
+      const updateRoles = (nextCine, nextColor) => {
+        const next = [];
+        if (nextCine) next.push("Cinematography");
+        if (nextColor) next.push("Colorist");
+        b.roles = next.length ? next : ["Colorist"];
+        markDirty();
+        renderPanel();
+      };
+
+      const cineBox = h("input", { type: "checkbox", checked: hasCine });
+      cineBox.addEventListener("change", () => updateRoles(cineBox.checked, hasColor));
+      const colorBox = h("input", { type: "checkbox", checked: hasColor });
+      colorBox.addEventListener("change", () => updateRoles(hasCine, colorBox.checked));
+
+      panel.append(h("div", { class: "card" }, h("div", { class: "card-body", style: "border:0; padding-top:16px" },
+        h("div", { class: "row" }, textField("Film title", b, "title"), textField("Camera (internal note, optional)", b, "camera")),
+        h("div", {},
+          h("span", { class: "lbl" }, "Role symbols shown under title"),
+          h("div", { class: "role-checks" },
+            h("label", { class: "role-chip" + (hasCine ? " is-on" : "") }, cineBox, "Cinematography (Camera symbol)"),
+            h("label", { class: "role-chip" + (hasColor ? " is-on" : "") }, colorBox, "Colour Grading (DaVinci symbol)"))),
         mediaField({ label: "Before — Log image", kind: "image", getValue: () => b.before, setValue: (v) => (b.before = v), slug, purpose: "log" }),
         mediaField({ label: "After — graded image", kind: "image", getValue: () => b.after, setValue: (v) => (b.after = v), slug, purpose: "graded" }),
         h("div", { class: "card-tools", style: "margin-top:6px" },
           h("button", { class: "btn danger small", disabled: content.before_after.length <= 1, onclick: () => { content.before_after.splice(i, 1); markDirty(); renderPanel(); } }, "Remove")))));
     });
-    panel.append(h("button", { class: "btn ghost", disabled: content.before_after.length >= 6, onclick: () => { content.before_after.push({ title: "", camera: "", before: "", after: "" }); markDirty(); renderPanel(); } }, "+ Add before/after"));
+    panel.append(h("button", { class: "btn ghost", disabled: content.before_after.length >= 6, onclick: () => { content.before_after.push({ title: "", camera: "", roles: ["Colorist"], before: "", after: "" }); markDirty(); renderPanel(); } }, "+ Add before/after"));
   }
 
   /* ------------------------------------------------------------------ about */
@@ -899,7 +929,10 @@
       roles: [],
       ...p,
     }));
-    content.before_after = content.before_after || [];
+    content.before_after = (content.before_after || []).map((b) => ({
+      roles: ["Colorist"],
+      ...b,
+    }));
   }
 
   async function switchTab(id) {

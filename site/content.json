@@ -34,30 +34,49 @@
     {
       "title": "Oculus",
       "camera": "Arri Alexa Mini",
+      "roles": [
+        "Cinematography",
+        "Colorist"
+      ],
       "before": "assets/images/oculus-log-44dc1305.jpeg",
       "after": "assets/images/oculus-graded-234341f3.jpeg"
     },
     {
       "title": "Heartstealer",
       "camera": "Sony FX9",
+      "roles": [
+        "Cinematography",
+        "Colorist"
+      ],
       "before": "assets/images/hygiene-is-not-a-luxury-log-10de63e9.jpg",
       "after": "assets/images/hygiene-is-not-a-luxury-graded-39cd3439.jpg"
     },
     {
       "title": "Blood Gothika",
       "camera": "Arri Alexa Mini",
+      "roles": [
+        "Cinematography",
+        "Colorist"
+      ],
       "before": "assets/images/earplugs-from-space-log-4e6a4c94.jpg",
       "after": "assets/images/earplugs-from-space-graded-95d29458.jpg"
     },
     {
       "title": "Hygiene Is Not a Luxury",
       "camera": "16mm Film",
+      "roles": [
+        "Cinematography",
+        "Colorist"
+      ],
       "before": "assets/images/grade-log-7ba10de6.jpg",
       "after": "assets/images/grade-graded-2ff579a7.jpg"
     },
     {
       "title": "SETS",
       "camera": "ARRI Alexa Mini LF",
+      "roles": [
+        "Colorist"
+      ],
       "before": "assets/images/setz-log-43be94c6.jpg",
       "after": "assets/images/setz-graded-1bc6b246.jpg"
     }

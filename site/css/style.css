@@ -322,16 +322,41 @@ h1, h2, h3, p { margin: 0; }
 .statement-serif { font-family: var(--serif); letter-spacing: -0.03em; color: var(--ink); }
 .statement-row {
   margin-top: clamp(60px, 10vh, 110px);
-  padding-top: 20px;
+  padding-top: 24px;
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  align-items: center;
+  gap: 24px;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-2);
+}
+.statement-logos {
+  padding-top: clamp(24px, 3.2vw, 34px);
+}
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  opacity: 0.84;
+  transition: opacity 0.35s var(--ease);
+}
+.brand-logo:hover {
+  opacity: 1;
+}
+.brand-logo svg {
+  display: block;
+  width: auto;
+  height: clamp(18px, 2.1vw, 25px);
+}
+.brand-logo .logo-arri {
+  height: clamp(16px, 1.85vw, 22px);
+}
+.brand-logo .logo-davinci {
+  height: clamp(20px, 2.3vw, 27px);
 }
 
 /* ---------- BEFORE / AFTER ---------- */
@@ -428,6 +453,30 @@ h1, h2, h3, p { margin: 0; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.compare-tab .compare-roles {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 7px;
+  overflow: visible;
+}
+.role-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  opacity: 0.82;
+  transition: opacity 0.3s ease;
+}
+.role-icon svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+.compare-tab:hover .role-icon,
+.compare-tab.is-active .role-icon {
+  opacity: 1;
 }
 .compare-tab:hover, .compare-tab.is-active { color: var(--ink); }
 
@@ -942,6 +991,7 @@ h1, h2, h3, p { margin: 0; }
   .about-text { padding: 64px var(--pad) 52px; }
   .about-image { min-height: 110vw; }
   .statement-row { flex-direction: column; text-align: center; }
+  .statement-logos { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 22px 32px; }
   .hero-frame { width: clamp(220px, 64vw, 330px); }
   .hero-meta {
     grid-template-columns: 1fr 1fr;

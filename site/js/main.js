@@ -238,6 +238,24 @@ function initHero() {
 /* ==========================================================================
    Home: before / after
    ========================================================================== */
+function cameraRoleIcon() {
+  return `<span class="role-icon" title="Cinematography" aria-label="Cinematography"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 8V6.2C5.5 5.5 6 5 6.7 5H12.3C13 5 13.5 5.5 13.5 6.2V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="2.2" y="8" width="13.8" height="10.5" rx="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="9.1" cy="13.25" r="2.2" stroke="currentColor" stroke-width="1.5"/><path d="M16 11.2L21.8 8.4V18.1L16 15.3V11.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>`;
+}
+
+function davinciRoleIcon() {
+  return `<span class="role-icon" title="Colour Grading" aria-label="Colour Grading"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="7.2" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="7.6" cy="15" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="16.4" cy="15" r="4.1" stroke="currentColor" stroke-width="1.65"/><circle cx="12" cy="12.4" r="1.2" fill="currentColor"/></svg></span>`;
+}
+
+function renderCompareRoles(item) {
+  const roles = Array.isArray(item.roles) ? item.roles.join(" ") : "";
+  const hasCine = /cinematograph|\bdop\b|\bdp\b/i.test(roles);
+  const hasColor = /colou?r|grad/i.test(roles);
+  const icons = [];
+  if (hasCine) icons.push(cameraRoleIcon());
+  if (hasColor || !hasCine) icons.push(davinciRoleIcon());
+  return icons.join("");
+}
+
 function initCompare() {
   const root = $("#compare");
   const range = $("#cmp-range");
@@ -260,9 +278,13 @@ function initCompare() {
   }
 
   tabs.style.setProperty("--cols", String(BEFORE_AFTER.length));
-  tabs.innerHTML = BEFORE_AFTER.map((s, k) =>
-    `<button class="compare-tab" data-k="${k}" title="${esc(s.title)}"><strong>${esc(s.title)}</strong><span>${esc(s.camera)}</span></button>`
-  ).join("");
+  tabs.innerHTML = BEFORE_AFTER.map((s, k) => {
+    const roles = Array.isArray(s.roles) ? s.roles.join(" ") : "";
+    const labels = [];
+    if (/cinematograph|\bdop\b|\bdp\b/i.test(roles)) labels.push("Cinematography");
+    if (/colou?r|grad/i.test(roles) || !labels.length) labels.push("Colour Grading");
+    return `<button class="compare-tab" data-k="${k}" title="${esc(s.title)} — ${esc(labels.join(" & "))}"><strong>${esc(s.title)}</strong><span class="compare-roles">${renderCompareRoles(s)}</span></button>`;
+  }).join("");
   tabs.addEventListener("click", (e) => {
     const b = e.target.closest(".compare-tab");
     if (b) select(Number(b.dataset.k));

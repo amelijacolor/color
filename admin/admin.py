@@ -167,9 +167,19 @@ def validate_content(data):
     before_after = []
     for i, item in enumerate(ba_in, 1):
         f = f"Before & After #{i}"
+        roles_in = item.get("roles")
+        if roles_in is None:
+            roles = ["Colorist"]
+        elif isinstance(roles_in, list):
+            roles = [text(r, 60, f"{f} role") for r in roles_in[:4] if text(r, 60, f"{f} role")]
+            if not roles:
+                roles = ["Colorist"]
+        else:
+            raise Invalid(f"{f} roles: must be a list")
         before_after.append({
             "title": text(item.get("title"), 120, f"{f} title", True),
             "camera": text(item.get("camera"), 120, f"{f} camera"),
+            "roles": roles,
             "before": media_path(item.get("before"), f"{f} Log image", True),
             "after": media_path(item.get("after"), f"{f} graded image", True),
         })

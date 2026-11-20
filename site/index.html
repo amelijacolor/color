@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=7" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
 </head>
 <body>
   <div id="grain" aria-hidden="true"></div>
@@ -47,10 +47,40 @@
     <section class="statement" aria-label="Statement">
       <p class="statement-sans reveal">Beyond the frame,</p>
       <p class="statement-serif reveal">Beyond the ordinary.</p>
-      <div class="statement-row reveal">
-        <span>Colorist</span>
-        <span>Cinematographer</span>
-        <span>DaVinci Resolve</span>
+      <div class="statement-row statement-logos reveal" aria-label="Systems and tools">
+        <!-- ARRI monochrome wordmark -->
+        <span class="brand-logo" aria-label="ARRI" title="ARRI">
+          <svg class="logo-arri" viewBox="0 0 102 32" fill="currentColor" aria-hidden="true">
+            <path d="M18.4 3h-6.6L0 29h6.3l2.6-6h12.2l2.6 6H30L18.4 3zm-7.1 14.8L15 8.9l3.7 8.9h-7.4z"/>
+            <path d="M55.6 11.4C55.6 6.1 51.7 3 45.2 3H34v26h6V19.6h4.8l5.3 9.4h6.8l-6.1-10.3c3-.9 4.8-3.6 4.8-7.3zm-15.6-3.2h5c3 0 4.6 1.2 4.6 3.3 0 2.2-1.6 3.4-4.6 3.4h-5V8.2z"/>
+            <path d="M84.6 11.4C84.6 6.1 80.7 3 74.2 3H63v26h6V19.6h4.8l5.3 9.4h6.8l-6.1-10.3c3-.9 4.8-3.6 4.8-7.3zM69 8.2h5c3 0 4.6 1.2 4.6 3.3 0 2.2-1.6 3.4-4.6 3.4h-5V8.2z"/>
+            <rect x="94" y="3" width="6.2" height="26"/>
+          </svg>
+        </span>
+
+        <!-- SONY Cinema Camera System + Wordmark -->
+        <span class="brand-logo" aria-label="Sony Cinema System" title="Sony Cinema System">
+          <svg class="logo-sony" viewBox="0 0 144 32" fill="none" aria-hidden="true">
+            <!-- Cinema camera system icon (handle, body, lens, matte box) -->
+            <path d="M6.5 10V7.2C6.5 6.3 7.2 5.6 8.1 5.6H17.9C18.8 5.6 19.5 6.3 19.5 7.2V10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <rect x="2" y="10" width="21" height="15" rx="2.2" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12.5" cy="17.5" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M23 14.2L31.5 10.2V24.8L23 20.8V14.2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <!-- Classic Sony wide serif wordmark -->
+            <text x="41" y="23.5" fill="currentColor" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" letter-spacing="4">SONY</text>
+          </svg>
+        </span>
+
+        <!-- DaVinci Resolve 3-wheel mark + wordmark -->
+        <span class="brand-logo" aria-label="DaVinci Resolve" title="DaVinci Resolve">
+          <svg class="logo-davinci" viewBox="0 0 212 32" fill="none" aria-hidden="true">
+            <circle cx="16" cy="9.5" r="5.6" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="10.2" cy="20" r="5.6" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="21.8" cy="20" r="5.6" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="16" cy="16.5" r="1.5" fill="currentColor"/>
+            <text x="36" y="21.5" fill="currentColor" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="13.5" font-weight="500" letter-spacing="1.8">DAVINCI RESOLVE</text>
+          </svg>
+        </span>
       </div>
     </section>
 
@@ -156,6 +186,6 @@
     </div>
   </footer>
 
-  <script type="module" src="js/main.js?v=7"></script>
+  <script type="module" src="js/main.js?v=8"></script>
 </body>
 </html>
