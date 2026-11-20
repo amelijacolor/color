@@ -13,8 +13,10 @@
   let gitInfo = null;
   let tab = "films";
   let dirty = false;
+  let activeUploads = 0;
   const open = new Set();
-  const blobPreviews = new Map(); // path -> objectURL for immediate preview before Pages rebuilds
+  const blobPreviews = new Map(); // relPath -> objectURL for immediate preview before Pages rebuilds
+  const pendingBlobs = new Map(); // repoPath -> git blob sha (committed atomically on Save & Publish)
 
   /* ---------------------------------------------------------------- helpers */
   const h = (tag, attrs = {}, ...kids) => {
@@ -43,6 +45,40 @@
     if (blobPreviews.has(path)) return blobPreviews.get(path);
     return mode === "local" ? "/media/" + path : "../" + path;
   };
+
+  async function fetchGhRawUrl(relPath) {
+    if (blobPreviews.has(relPath)) return blobPreviews.get(relPath);
+    const res = await fetch(
+      `https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/site/${relPath}?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: `Bearer ${gh.token}`,
+          Accept: "application/vnd.github.raw+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    );
+    if (!res.ok) throw new Error("missing");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    blobPreviews.set(relPath, url);
+    return url;
+  }
+
+  function wireImgFallback(imgEl, relPath, onMissing) {
+    let triedGh = false;
+    imgEl.addEventListener("error", async () => {
+      if (mode === "github" && gh && relPath && !triedGh) {
+        triedGh = true;
+        try {
+          imgEl.src = await fetchGhRawUrl(relPath);
+          return;
+        } catch (_) {}
+      }
+      if (onMissing) onMissing();
+    });
+  }
 
   const siteUrl = () => (mode === "local" ? "http://127.0.0.1:8090" : "../");
 
@@ -181,7 +217,53 @@
   }
 
   async function ghSaveContent(data, message = "Update portfolio content") {
-    const encoded = utf8ToBase64(JSON.stringify(data, null, 2) + "\n");
+    const jsonText = JSON.stringify(data, null, 2) + "\n";
+    const encoded = utf8ToBase64(jsonText);
+
+    // If any files were uploaded in this session, commit all uploaded blobs + content.json
+    // in ONE atomic commit so GitHub Pages only triggers a single clean deploy.
+    if (pendingBlobs.size > 0) {
+      const commitAtomically = async () => {
+        const ref = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/ref/heads/${encodeURIComponent(gh.branch)}?_=${Date.now()}`);
+        const parentSha = ref.object.sha;
+        const parentCommit = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/commits/${parentSha}`);
+        const contentBlob = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/blobs`, "POST", {
+          content: encoded,
+          encoding: "base64",
+        });
+        const tree = [];
+        for (const [repoPath, sha] of pendingBlobs.entries()) {
+          tree.push({ path: repoPath, mode: "100644", type: "blob", sha });
+        }
+        tree.push({ path: "site/content.json", mode: "100644", type: "blob", sha: contentBlob.sha });
+        const newTree = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/trees`, "POST", {
+          base_tree: parentCommit.tree.sha,
+          tree,
+        });
+        const newCommit = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/commits`, "POST", {
+          message,
+          tree: newTree.sha,
+          parents: [parentSha],
+        });
+        await ghReq(`/repos/${gh.owner}/${gh.repo}/git/refs/heads/${encodeURIComponent(gh.branch)}`, "PATCH", {
+          sha: newCommit.sha,
+          force: false,
+        });
+        gh.contentSha = contentBlob.sha;
+        pendingBlobs.clear();
+      };
+      try {
+        await commitAtomically();
+      } catch (err) {
+        if (err && (err.status === 409 || err.status === 422)) {
+          await commitAtomically();
+        } else {
+          throw err;
+        }
+      }
+      return;
+    }
+
     const putWithSha = async (sha) => {
       const res = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json`, "PUT", {
         message,
@@ -221,11 +303,11 @@
     const safeSlug = slugify(slug);
     const name = `${safeSlug}-${purpose}-${rand}.${ext}`;
     const repoPath = `site/assets/${folder}/${name}`;
-    await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/${repoPath}`, "PUT", {
-      message: `Upload ${name}`,
-      branch: gh.branch,
+    const blob = await ghReq(`/repos/${gh.owner}/${gh.repo}/git/blobs`, "POST", {
       content: b64,
+      encoding: "base64",
     });
+    pendingBlobs.set(repoPath, blob.sha);
     onProgress(1);
     const relPath = `assets/${folder}/${name}`;
     blobPreviews.set(relPath, URL.createObjectURL(file));
@@ -298,10 +380,10 @@
       let preview;
       if (value && kind === "image") {
         preview = h("img", { class: "thumb", src: url, alt: "" });
-        preview.addEventListener("error", () => preview.replaceWith(h("div", { class: "vid" }, "missing")));
+        wireImgFallback(preview, value, () => preview.replaceWith(h("div", { class: "vid" }, "missing")));
       } else if (value && kind === "video") {
         preview = h("video", { src: url, preload: "metadata", muted: true, controls: true });
-        preview.addEventListener("error", () => preview.replaceWith(h("div", { class: "vid" }, "not uploaded yet")));
+        preview.addEventListener("error", () => preview.replaceWith(h("div", { class: "vid" }, "deploying…")));
       } else {
         preview = h("div", { class: "vid" }, "no file");
       }
@@ -312,16 +394,19 @@
         const file = input.files[0];
         if (!file) return;
         prog.hidden = false; status.hidden = true;
+        activeUploads++;
         try {
           const uploader = mode === "local" ? localUpload : ghUploadFile;
           const path = await uploader(file, kind, slug(), purpose, (p) => (prog.firstChild.style.width = Math.round(p * 100) + "%"));
           setValue(path);
           markDirty();
-          toast(mode === "github" ? "Uploaded to GitHub — press Save & Publish" : "Uploaded — remember to press Save");
+          toast(mode === "github" ? "Ready — click Save & Publish when done" : "Uploaded — remember to press Save");
           render();
         } catch (e) {
           prog.hidden = true; status.hidden = false; status.textContent = e.message;
           toast(e.message, true);
+        } finally {
+          activeUploads = Math.max(0, activeUploads - 1);
         }
       });
       wrap.append(
@@ -512,8 +597,15 @@
 
   function filmCard(p, i) {
     const isOpen = open.has(p.slug);
+    let headThumb;
+    if (p.poster) {
+      headThumb = h("img", { class: "thumb", src: mediaSrc(p.poster), alt: "" });
+      wireImgFallback(headThumb, p.poster);
+    } else {
+      headThumb = h("div", { class: "vid thumb" }, "no cover");
+    }
     const head = h("div", { class: "card-head", onclick: () => { isOpen ? open.delete(p.slug) : open.add(p.slug); renderPanel(); } },
-      p.poster ? h("img", { class: "thumb", src: mediaSrc(p.poster), alt: "" }) : h("div", { class: "vid thumb" }, "no cover"),
+      headThumb,
       h("div", {}, h("div", { class: "card-title" }, p.title || "Untitled"), h("div", { class: "card-sub" }, [p.format, p.camera].filter(Boolean).join(" · "))),
       h("div", { class: "card-spacer" }),
       festivalPill(p),
@@ -652,17 +744,22 @@
       const files = Array.from(uploadInput.files || []);
       if (!files.length) return;
       const uploader = mode === "local" ? localUpload : ghUploadFile;
-      for (const file of files) {
-        if (slides.length >= 30) { toast("Maximum 30 opening reel images", true); break; }
-        try {
-          const path = await uploader(file, "image", "hero", "reel", () => {});
-          slides.push({ image: path, label: "" });
-          markDirty();
-        } catch (e) {
-          toast(e.message, true);
+      activeUploads++;
+      try {
+        for (const file of files) {
+          if (slides.length >= 30) { toast("Maximum 30 opening reel images", true); break; }
+          try {
+            const path = await uploader(file, "image", "hero", "reel", () => {});
+            slides.push({ image: path, label: "" });
+            markDirty();
+          } catch (e) {
+            toast(e.message, true);
+          }
         }
+      } finally {
+        activeUploads = Math.max(0, activeUploads - 1);
       }
-      toast("Added to Opening Reel — press Save");
+      toast(mode === "github" ? "Added to Opening Reel — click Save & Publish" : "Added to Opening Reel — press Save");
       renderPanel();
     });
 
@@ -702,6 +799,8 @@
           h("h3", {}, "Quick-pick from your films (click to add or remove)"),
           h("div", { class: "pick-grid" }, filmsWithCovers.map((p) => {
             const on = activeSet.has(p.poster);
+            const chipImg = h("img", { src: mediaSrc(p.poster), alt: "" });
+            wireImgFallback(chipImg, p.poster);
             return h("button", {
               type: "button",
               class: "pick-chip" + (on ? " is-on" : ""),
@@ -713,7 +812,7 @@
                 renderPanel();
               },
             },
-            h("img", { src: mediaSrc(p.poster), alt: "" }),
+            chipImg,
             h("span", {}, (on ? "✓ " : "+ ") + p.title));
           }))));
     }
@@ -946,6 +1045,10 @@
   }
 
   async function save() {
+    if (activeUploads > 0) {
+      toast("Please wait for your upload to finish first.", true);
+      return;
+    }
     const btn = document.getElementById("save");
     btn.disabled = true; btn.textContent = mode === "github" ? "Publishing…" : "Saving…";
     try {
