@@ -92,7 +92,7 @@
       "title": "Oculus",
       "format": "Short Film",
       "camera": "Arri Alexa Mini",
-      "poster": "assets/images/oculus-graded.png",
+      "poster": "assets/images/oculus-cover-f2be3d55.jpg",
       "preview": "assets/videos/oculus-preview-9d7cd0dd.mp4",
       "notes": ""
     },
@@ -113,7 +113,7 @@
       "title": "Blood Gothika",
       "format": "Short Film",
       "camera": "Arri Alexa Mini",
-      "poster": "assets/images/blood-gothika.png",
+      "poster": "assets/images/blood-gothika-cover-f66ee649.jpg",
       "preview": "assets/videos/blood-gothika-preview-0deb9d64.mp4",
       "notes": ""
     },
@@ -135,7 +135,7 @@
       "title": "Heartstealer",
       "format": "Short Film",
       "camera": "Sony FX9",
-      "poster": "assets/images/heartstealer-cover-a2608a1f.jpg",
+      "poster": "assets/images/heartstealer-cover-38df40dc.jpg",
       "preview": "assets/videos/heartstealer-preview-e8d44c2c.mp4",
       "notes": ""
     },
@@ -206,7 +206,7 @@
       "title": "Touch Grass",
       "format": "Short Film",
       "camera": "Sony FX9",
-      "poster": "assets/images/touch-grass.png",
+      "poster": "assets/images/touch-grass-cover-cdf07f79.jpg",
       "preview": "assets/videos/touch-grass-preview-3bf5c4cf.mp4",
       "notes": ""
     },
