@@ -53,47 +53,68 @@ function armReveals(root) {
 }
 
 /* ==========================================================================
-   Loop media: shows chosen cover image at rest; lazy-loads & plays <video> on demand
+   Loop media: shows chosen cover image at rest; plays real <video> on hover & project pages
    ========================================================================== */
 function loopMedia({ src, poster, variant = 0, playing = false, alt = "" }) {
   return `
     <div class="loop-media v${variant % 4} ${playing ? "" : "is-paused"}" data-src="${esc(src)}">
       <img class="loop-media-still" src="${esc(poster)}" alt="${esc(alt)}" loading="lazy" decoding="async" />
-      <video class="loop-media-video" muted loop playsinline preload="none" poster="${esc(poster)}"></video>
+      <video class="loop-media-video" ${playing ? "autoplay" : ""} muted loop playsinline preload="${playing ? "auto" : "metadata"}" poster="${esc(poster)}"></video>
     </div>`;
 }
 
-function loadVideo(box) {
+function attachVideo(box, autoplay = false) {
   const video = $("video", box);
-  if (!video || video.dataset.loaded || !box.dataset.src) return;
-  video.dataset.loaded = "1";
-  video.addEventListener("loadeddata", () => {
-    if (video.videoWidth > 0) {
-      box.classList.add("has-video");
-      if (!box.classList.contains("is-paused")) video.play().catch(() => {});
-    }
-  });
-  video.src = box.dataset.src;
+  if (!video || !box.dataset.src) return video;
+  if (!video.dataset.loaded) {
+    video.dataset.loaded = "1";
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.playsInline = true;
+    const markReady = () => {
+      if (video.videoWidth > 0) {
+        box.classList.add("has-video");
+        if (!box.classList.contains("is-paused")) video.play().catch(() => {});
+      }
+    };
+    video.addEventListener("loadeddata", markReady);
+    video.addEventListener("canplay", markReady);
+    video.addEventListener("playing", () => box.classList.add("has-video"));
+    video.src = box.dataset.src;
+  }
+  if (autoplay) {
+    video.preload = "auto";
+    video.play().catch(() => {});
+  }
+  return video;
 }
 
 function wireMedia(root) {
   $$(".loop-media", root).forEach((box) => {
-    // Only auto-load videos that are meant to play immediately (project pages);
-    // portfolio hover previews load lazily on hover so Home & Portfolio stay fast.
-    if (!box.classList.contains("is-paused")) {
-      loadVideo(box);
-    }
+    const shouldPlay = !box.classList.contains("is-paused");
+    if (shouldPlay) attachVideo(box, true);
   });
+}
+
+function warmPortfolioVideos() {
+  const grid = $("#pf-grid");
+  if (!grid) return;
+  $$(".loop-media", grid).forEach((box) => attachVideo(box, false));
 }
 
 function setPlaying(box, on) {
   if (!box) return;
   box.classList.toggle("is-paused", !on);
-  if (on) loadVideo(box);
-  const video = $("video", box);
-  if (video && box.classList.contains("has-video")) {
-    if (on) video.play().catch(() => {});
-    else video.pause();
+  if (on) {
+    const video = attachVideo(box, true);
+    if (video) {
+      if (video.readyState >= 2 && video.videoWidth > 0) box.classList.add("has-video");
+      video.play().catch(() => {});
+    }
+  } else {
+    const video = $("video", box);
+    if (video) video.pause();
   }
 }
 
@@ -371,6 +392,7 @@ function applyRoute() {
     $('[data-nav="portfolio"]').classList.add("is-current");
   } else if (hash === "#/portfolio") {
     pf.hidden = false;
+    warmPortfolioVideos();
     $('[data-nav="portfolio"]').classList.add("is-current");
   } else {
     home.hidden = false;
