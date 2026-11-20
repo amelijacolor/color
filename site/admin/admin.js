@@ -128,6 +128,7 @@
   async function ghReq(endpoint, method = "GET", body) {
     const res = await fetch(`https://api.github.com${endpoint}`, {
       method,
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${gh.token}`,
         Accept: "application/vnd.github+json",
@@ -140,7 +141,11 @@
     if (res.status === 401 || res.status === 403) {
       throw new Error(data.message || "GitHub token invalid or missing Contents read/write permission for this repo");
     }
-    if (!res.ok) throw new Error(data.message || `GitHub error (${res.status})`);
+    if (!res.ok) {
+      const err = new Error(data.message || `GitHub error (${res.status})`);
+      err.status = res.status;
+      throw err;
+    }
     return data;
   }
 
@@ -170,20 +175,34 @@
   }
 
   async function ghLoadContent() {
-    const file = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}`);
+    const file = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`);
     gh.contentSha = file.sha;
     return JSON.parse(base64ToUtf8(file.content));
   }
 
   async function ghSaveContent(data, message = "Update portfolio content") {
-    const latest = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}`);
-    const res = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json`, "PUT", {
-      message,
-      branch: gh.branch,
-      sha: latest.sha,
-      content: utf8ToBase64(JSON.stringify(data, null, 2) + "\n"),
-    });
-    gh.contentSha = res.content.sha;
+    const encoded = utf8ToBase64(JSON.stringify(data, null, 2) + "\n");
+    const putWithSha = async (sha) => {
+      const res = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json`, "PUT", {
+        message,
+        branch: gh.branch,
+        sha,
+        content: encoded,
+      });
+      gh.contentSha = res.content.sha;
+    };
+
+    try {
+      const sha = gh.contentSha || (await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`)).sha;
+      await putWithSha(sha);
+    } catch (err) {
+      if (err && err.status === 409) {
+        const fresh = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`);
+        await putWithSha(fresh.sha);
+      } else {
+        throw err;
+      }
+    }
   }
 
   async function ghUploadFile(file, kind, slug, purpose, onProgress) {
