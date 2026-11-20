@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ameli Mor — Colorist &amp; Cinematographer</title>
+  <meta name="description" content="Colour grading and cinematography by Ameli Mor." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="grain" aria-hidden="true"></canvas>
+  <div id="fade" aria-hidden="true"></div>
+  <div id="cursor-main" class="cursor-main" aria-hidden="true"></div>
+  <div id="cursor-text" class="cursor-text" aria-hidden="true">
+    <span id="cursor-kicker" class="cursor-kicker"></span>
+  </div>
+
+  <header class="nav" id="nav">
+    <a href="#/" class="nav-brand">Ameli Mor</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#/portfolio" data-nav="portfolio">Portfolio</a>
+      <a href="#/about" data-nav="about">About</a>
+      <a href="#contact" id="nav-contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ===================== HOME ===================== -->
+  <main id="view-home" class="view">
+
+    <section class="hero" id="top" aria-label="Introduction">
+      <div class="hero-frame" id="hero-frame"></div>
+      <h1 class="hero-word" aria-label="Ameli Mor">
+        <span class="hero-word-mask" aria-hidden="true">
+          <span class="ch" style="--i:0">A</span><span class="ch" style="--i:1">M</span><span class="ch" style="--i:2">E</span><span class="ch" style="--i:3">L</span><span class="ch" style="--i:4">I</span><span class="ch-space">&nbsp;</span><span class="ch" style="--i:5">M</span><span class="ch" style="--i:6">O</span><span class="ch" style="--i:7">R</span>
+        </span>
+      </h1>
+      <div class="hero-meta">
+        <span>Colorist &amp; Cinematographer</span>
+        <span>&copy; 2026 Ameli Mor</span>
+        <span class="hero-now-wrap"><span id="hero-now">&nbsp;</span></span>
+      </div>
+    </section>
+
+    <section class="statement" aria-label="Statement">
+      <p class="statement-sans reveal">Colour is</p>
+      <p class="statement-serif reveal">felt first.</p>
+      <div class="statement-row reveal">
+        <span>Colour Grading</span>
+        <span>Cinematography</span>
+        <span>DaVinci Resolve</span>
+      </div>
+    </section>
+
+    <section class="selected" id="selected" aria-label="Before and after">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Selected grades</span>
+        <span class="eyebrow dim" id="cmp-count">01 / 03</span>
+      </div>
+
+      <div class="compare reveal-wipe" id="compare" style="--pos: 50%">
+        <img class="compare-img" id="cmp-after" alt="" />
+        <img class="compare-img compare-before" id="cmp-before" alt="" />
+        <span class="compare-label compare-label-l">Log</span>
+        <span class="compare-label compare-label-r">Graded</span>
+        <div class="compare-line" aria-hidden="true"><span class="compare-knob">&#8596;</span></div>
+        <input class="compare-range" id="cmp-range" type="range" min="0" max="100" value="50" aria-label="Compare Log and graded" />
+      </div>
+
+      <div class="compare-tabs" id="cmp-tabs"></div>
+    </section>
+
+    <div class="band theme-light" aria-hidden="true">
+      <div class="band-track">
+        <span>Colour grading.</span><span>Colour grading.</span><span>Colour grading.</span><span>Colour grading.</span>
+        <span>Colour grading.</span><span>Colour grading.</span><span>Colour grading.</span><span>Colour grading.</span>
+      </div>
+    </div>
+
+    <section class="about theme-light" id="about" aria-label="About">
+      <div class="about-text">
+        <h2 class="about-title reveal">About</h2>
+        <p class="about-body reveal" id="about-body"></p>
+        <div class="about-links reveal">
+          <a href="#/portfolio" class="link">Portfolio</a>
+        </div>
+      </div>
+      <div class="about-image reveal-wipe">
+        <img src="assets/images/lucifer.png" alt="Still from Lucifer" />
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== PORTFOLIO ===================== -->
+  <main id="view-portfolio" class="view" hidden>
+    <section class="pf-head">
+      <h1 class="pf-title">Portfolio</h1>
+      <p class="eyebrow dim" id="pf-count">10 films &middot; hover to play</p>
+    </section>
+    <section class="pf-grid" id="pf-grid" aria-label="Films"></section>
+  </main>
+
+  <!-- ===================== PROJECT ===================== -->
+  <main id="view-project" class="view" hidden></main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="foot theme-light" id="contact">
+    <div class="foot-top">
+      <div class="foot-left reveal">
+        <p class="foot-line">Have a project?<br />Let&rsquo;s talk.</p>
+        <nav class="foot-links" aria-label="Contact">
+          <a href="mailto:ameli.morkunaite@gmail.com" data-email="link">Email</a>
+          <a href="https://www.instagram.com/amelimor_tiff/" target="_blank" rel="noopener noreferrer" data-instagram>Instagram</a>
+        </nav>
+      </div>
+
+      <form class="contact-form reveal" id="contact-form" novalidate>
+        <label class="field">
+          <span>Your Name</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Name" required />
+        </label>
+        <label class="field">
+          <span>Your Email</span>
+          <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+        </label>
+        <label class="field">
+          <span>Project Details</span>
+          <textarea name="message" rows="3" placeholder="Tell me about your project, format, or timeline…" required></textarea>
+        </label>
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="form-foot">
+          <button type="submit" class="send" id="send-btn"><span>Send message</span> <span aria-hidden="true">&rarr;</span></button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+    <div class="foot-word" aria-hidden="true">Ameli Mor</div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Ameli Mor</span>
+      <a href="mailto:ameli.morkunaite@gmail.com" data-email="text">ameli.morkunaite@gmail.com</a>
+      <a href="#top" id="to-top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+{
+  "about": "I'm a cinematographer and colorist with a background in film, photography, and graphic design. I'm comfortable working with cameras such as Arri, Sony, Blackmagic and Canon, and I love being hands-on with all things behind the lens. Whether it's camera operation or lighting, I enjoy bringing visual stories to life from start to finish. I'm also well-versed in the Adobe Creative Suite as well as DaVinci Resolve, and always looking for new ways to grow and push my craft forward.",
+  "links": {
+    "email": "ameli.morkunaite@gmail.com",
+    "instagram": "https://www.instagram.com/amelimor_tiff/"
+  },
+  "hero_slides": [
+    {
+      "image": "assets/images/hero-reel-a3ab6646.jpg",
+      "label": "Still 2026 08 23 134743 1.60.2"
+    },
+    {
+      "image": "assets/images/hero-reel-ed4565cc.jpg",
+      "label": "Still 2026 08 18 172103 1.10.1 copy"
+    },
+    {
+      "image": "assets/images/hero-reel-4d170e8f.jpg",
+      "label": "Still 2026 08 16 193147 1.50.1 copy"
+    },
+    {
+      "image": "assets/images/hero-reel-7dc2ee7f.jpg",
+      "label": "Still 2026 08 16 193147 1.49.2 copy"
+    },
+    {
+      "image": "assets/images/hero-reel-9da1a418.jpg",
+      "label": "IMG 2248 copy"
+    },
+    {
+      "image": "assets/images/hero-reel-1da061ca.jpg",
+      "label": "IMG 0580 copy"
+    },
+    {
+      "image": "assets/images/hero-reel-881ce8b9.jpg",
+      "label": "IMG 0560 copy"
+    }
+  ],
+  "before_after": [
+    {
+      "title": "Oculus",
+      "camera": "Arri Alexa Mini",
+      "before": "assets/images/oculus-log-44dc1305.jpeg",
+      "after": "assets/images/oculus-graded-234341f3.jpeg"
+    },
+    {
+      "title": "Heartstealer",
+      "camera": "Sony FX9",
+      "before": "assets/images/hygiene-is-not-a-luxury-log-10de63e9.jpg",
+      "after": "assets/images/hygiene-is-not-a-luxury-graded-39cd3439.jpg"
+    },
+    {
+      "title": "Blood Gothika",
+      "camera": "Arri Alexa Mini",
+      "before": "assets/images/earplugs-from-space-log-4e6a4c94.jpg",
+      "after": "assets/images/earplugs-from-space-graded-95d29458.jpg"
+    },
+    {
+      "title": "Hygiene Is Not a Luxury",
+      "camera": "16mm Film",
+      "before": "assets/images/grade-log-7ba10de6.jpg",
+      "after": "assets/images/grade-graded-2ff579a7.jpg"
+    },
+    {
+      "title": "SETS",
+      "camera": "ARRI Alexa Mini LF",
+      "before": "assets/images/setz-log-43be94c6.jpg",
+      "after": "assets/images/setz-graded-1bc6b246.jpg"
+    }
+  ],
+  "projects": [
+    {
+      "slug": "oculus",
+      "title": "Oculus",
+      "format": "Short Film",
+      "camera": "Arri Alexa Mini",
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "poster": "assets/images/oculus-graded.png",
+      "preview": "assets/videos/oculus-preview-9d7cd0dd.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [
+        {
+          "festival": "Citylights Film Festival",
+          "distinction": "Official Selection",
+          "year": "2026",
+          "qualifying": "",
+          "won": false
+        }
+      ],
+      "clips": [
+        "assets/videos/oculus-clip-66e3c581.mp4",
+        "assets/videos/oculus-clip-674724ab.mp4",
+        "assets/videos/oculus-clip-05b9300c.mp4",
+        "assets/videos/oculus-clip-ef60e6bf.mp4"
+      ]
+    },
+    {
+      "slug": "blood-gothika",
+      "title": "Blood Gothika",
+      "format": "Short Film",
+      "camera": "Arri Alexa Mini",
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "poster": "assets/images/blood-gothika.png",
+      "preview": "assets/videos/blood-gothika-preview-0deb9d64.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/blood-gothika-clip-feb708db.mp4",
+        "assets/videos/blood-gothika-clip-e9901ddf.mp4",
+        "assets/videos/blood-gothika-clip-2ad1d855.mp4",
+        "assets/videos/blood-gothika-clip-4e151d2b.mp4"
+      ]
+    },
+    {
+      "slug": "heartstealer",
+      "title": "Heartstealer",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "roles": [
+        "Colorist"
+      ],
+      "poster": "assets/images/heartstealer-cover-a2608a1f.jpg",
+      "preview": "assets/videos/heartstealer-preview-e8d44c2c.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/heartstealer-clip-37e49e99.mp4",
+        "assets/videos/heartstealer-clip-24665aeb.mp4",
+        "assets/videos/heartstealer-clip-658f0c65.mp4",
+        "assets/videos/heartstealer-clip-ee3580e3.mp4",
+        "assets/videos/heartstealer-clip-45fa1ee4.mp4",
+        "assets/videos/heartstealer-clip-6d1f4324.mp4"
+      ]
+    },
+    {
+      "slug": "hygiene-is-not-a-luxury",
+      "title": "Hygiene Is Not a Luxury",
+      "format": "Kodak Commercial",
+      "camera": "Arri Flex 416 Plus · 16mm 200T",
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "poster": "assets/images/hygiene-is-not-a-luxury-cover-6e63803e.jpg",
+      "preview": "assets/videos/hygiene-is-not-a-luxury-preview-1e3d39be.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/hygiene-is-not-a-luxury-clip-b1ed57ab.mp4",
+        "assets/videos/hygiene-is-not-a-luxury-clip-065117de.mp4",
+        "assets/videos/hygiene-is-not-a-luxury-clip-cb6ecf13.mp4",
+        "assets/videos/hygiene-is-not-a-luxury-clip-b4ab31be.mp4"
+      ]
+    },
+    {
+      "slug": "touch-grass",
+      "title": "Touch Grass",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "poster": "assets/images/touch-grass.png",
+      "preview": "assets/videos/touch-grass-preview-3bf5c4cf.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [
+        {
+          "festival": "Big Fridge International Film Festival",
+          "distinction": "Semi-Finalist",
+          "year": "2025",
+          "qualifying": "",
+          "won": false
+        },
+        {
+          "festival": "Brighton Rocks Film Festival",
+          "distinction": "Official Selection",
+          "year": "2026",
+          "qualifying": "",
+          "won": false
+        },
+        {
+          "festival": "Interference Film Festival",
+          "distinction": "Official Selection",
+          "year": "2026",
+          "qualifying": "",
+          "won": false
+        },
+        {
+          "festival": "London Independent Film Festival",
+          "distinction": "Official Selection",
+          "year": "2026",
+          "qualifying": "",
+          "won": false
+        }
+      ],
+      "clips": [
+        "assets/videos/touch-grass-clip-52bb0377.mp4",
+        "assets/videos/touch-grass-clip-55d40960.mp4",
+        "assets/videos/touch-grass-clip-c4317f68.mp4",
+        "assets/videos/touch-grass-clip-a1c1bf9e.mp4"
+      ]
+    },
+    {
+      "slug": "lucifer",
+      "title": "Lucifer",
+      "format": "Music Video",
+      "camera": "Blackmagic Pocket 6K",
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "poster": "assets/images/lucifer.png",
+      "preview": "assets/videos/lucifer-preview-44628120.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/lucifer-clip-d37bfe65.mp4",
+        "assets/videos/lucifer-clip-bf884391.mp4",
+        "assets/videos/lucifer-clip-b7d79a1f.mp4",
+        "assets/videos/lucifer-clip-7b5ddf3c.mp4"
+      ]
+    },
+    {
+      "slug": "earplugs-from-space",
+      "title": "Sets",
+      "format": "Spec Ad for Sets",
+      "camera": "Arri Alexa Mini & Camcorder",
+      "roles": [
+        "Colour Grading"
+      ],
+      "poster": "assets/images/earplugs-from-space-cover-aa14a4d1.jpg",
+      "preview": "assets/videos/earplugs-from-space-preview-e90dc0e7.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/earplugs-from-space-clip-51d1fad2.mp4",
+        "assets/videos/earplugs-from-space-clip-8ce7939b.mp4",
+        "assets/videos/earplugs-from-space-clip-bdc703fb.mp4",
+        "assets/videos/earplugs-from-space-clip-4ff25b00.mp4",
+        "assets/videos/earplugs-from-space-clip-78f04463.mp4",
+        "assets/videos/earplugs-from-space-clip-a66891a7.mp4"
+      ]
+    },
+    {
+      "slug": "final-card",
+      "title": "Final Card",
+      "format": "Kodak Commercial",
+      "camera": "16mm Film",
+      "roles": [
+        "Colour Grading"
+      ],
+      "poster": "assets/images/final-card.png",
+      "preview": "assets/videos/final-card-preview-e7781346.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/final-card-clip-bf5962ac.mp4",
+        "assets/videos/final-card-clip-e12aaced.mp4",
+        "assets/videos/final-card-clip-5ec21117.mp4",
+        "assets/videos/final-card-clip-6e3503a8.mp4"
+      ]
+    }
+  ]
+}
