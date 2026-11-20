@@ -163,29 +163,17 @@ function initHero() {
     : PROJECTS.map((p) => ({ image: p.poster, label: p.title }));
   if (!slides.length) return;
 
-  const isAutoFilename = (s) => /^(IMG|Still|DSC|Screenshot|Frame|PXL|CleanShot)\b/i.test(String(s || "").trim());
-  const filmNames = PROJECTS.map((p) => p.title).filter(Boolean);
-
-  frame.innerHTML = slides.map((s, idx) =>
-    `<img src="${esc(s.image)}" alt="${esc(filmNames[idx % Math.max(1, filmNames.length)] || "Ameli Mor")}" decoding="async" />`
+  frame.innerHTML = slides.map((s) =>
+    `<img src="${esc(s.image)}" alt="${esc(s.label || "Ameli Mor")}" decoding="async" />`
   ).join("");
   const imgs = $$("img", frame);
   let i = 0;
-  let nameIdx = 0;
-
-  const getLabel = (n) => {
-    const custom = slides[n] && slides[n].label && !isAutoFilename(slides[n].label) ? slides[n].label : "";
-    if (custom) return `${String(n + 1).padStart(2, "0")} — ${custom}`;
-    if (filmNames.length) {
-      const k = nameIdx % filmNames.length;
-      return `${String(k + 1).padStart(2, "0")} — ${filmNames[k]}`;
-    }
-    return String(n + 1).padStart(2, "0");
-  };
 
   const show = (n, immediate = false) => {
     imgs.forEach((im, k) => im.classList.toggle("is-on", k === n));
-    const label = getLabel(n);
+    const num = String(n + 1).padStart(2, "0");
+    const caption = slides[n] && slides[n].label ? slides[n].label.trim() : "";
+    const label = caption ? `${num} — ${caption}` : num;
     if (immediate) {
       now.textContent = label;
       return;
@@ -197,11 +185,10 @@ function initHero() {
     }, 220);
   };
   show(0, true);
-  if (imgs.length > 1 || filmNames.length > 1) {
+  if (imgs.length > 1) {
     setInterval(() => {
       if ($("#view-home").hidden || document.hidden) return;
       i = (i + 1) % imgs.length;
-      nameIdx = (nameIdx + 1) % Math.max(1, filmNames.length);
       show(i);
     }, 2600);
   }
