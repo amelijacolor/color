@@ -64,6 +64,27 @@
   ],
   "projects": [
     {
+      "slug": "natural-order-of-things",
+      "title": "Natural Order of Things",
+      "format": "Short Film",
+      "camera": "Arri Alexa Amira",
+      "roles": [
+        "Cinematographer"
+      ],
+      "poster": "assets/images/natural-order-of-things-cover-b166424c.png",
+      "preview": "assets/videos/natural-order-of-things-preview-12b20b74.mp4",
+      "notes": "",
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/natural-order-of-things-clip-e78ac96c.mp4",
+        "assets/videos/natural-order-of-things-clip-0bc922f6.mp4",
+        "assets/videos/natural-order-of-things-clip-5c465df3.mp4",
+        "assets/videos/natural-order-of-things-clip-3e04e886.mp4",
+        "assets/videos/natural-order-of-things-clip-12276475.mp4"
+      ]
+    },
+    {
       "festivals_won": 0,
       "laurels": [
         {
