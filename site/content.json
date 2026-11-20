@@ -210,27 +210,6 @@
       "festivals_won": 0,
       "laurels": [],
       "clips": [
-        "assets/videos/lucifer-clip-d37bfe65.mp4",
-        "assets/videos/lucifer-clip-bf884391.mp4",
-        "assets/videos/lucifer-clip-b7d79a1f.mp4",
-        "assets/videos/lucifer-clip-7b5ddf3c.mp4"
-      ],
-      "roles": [
-        "Cinematography",
-        "Colour Grading"
-      ],
-      "slug": "lucifer",
-      "title": "Lucifer",
-      "format": "Music Video",
-      "camera": "Blackmagic Pocket 6K",
-      "poster": "assets/images/lucifer-cover-9d89393c.png",
-      "preview": "assets/videos/lucifer-preview-44628120.mp4",
-      "notes": ""
-    },
-    {
-      "festivals_won": 0,
-      "laurels": [],
-      "clips": [
         "assets/videos/earplugs-from-space-clip-51d1fad2.mp4",
         "assets/videos/earplugs-from-space-clip-8ce7939b.mp4",
         "assets/videos/earplugs-from-space-clip-bdc703fb.mp4",
@@ -247,6 +226,27 @@
       "camera": "Arri Alexa Mini & Camcorder",
       "poster": "assets/images/earplugs-from-space-cover-aa14a4d1.jpg",
       "preview": "assets/videos/earplugs-from-space-preview-e90dc0e7.mp4",
+      "notes": ""
+    },
+    {
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/lucifer-clip-d37bfe65.mp4",
+        "assets/videos/lucifer-clip-bf884391.mp4",
+        "assets/videos/lucifer-clip-b7d79a1f.mp4",
+        "assets/videos/lucifer-clip-7b5ddf3c.mp4"
+      ],
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "slug": "lucifer",
+      "title": "Lucifer",
+      "format": "Music Video",
+      "camera": "Blackmagic Pocket 6K",
+      "poster": "assets/images/lucifer-cover-9d89393c.png",
+      "preview": "assets/videos/lucifer-preview-44628120.mp4",
       "notes": ""
     },
     {
