@@ -594,10 +594,11 @@ h1, h2, h3, p { margin: 0; }
 @keyframes kb-d { from { transform: scale(1.18) translate(1%, -1.5%); } to { transform: scale(1.06) translate(-2%, 1%); } }
 
 .loop-media-video { opacity: 0; transition: opacity 0.35s ease; }
+.loop-media.has-video.was-played .loop-media-video,
 .loop-media.has-video:not(.is-paused) .loop-media-video { opacity: 1; }
 .loop-media.is-paused .loop-media-still { animation-play-state: paused; }
-/* On portfolio cards, cover image stays crisp & static at rest on both phone and laptop */
-.pf-media .loop-media.is-paused .loop-media-still { animation: none; transform: none; }
+/* On portfolio cards: never zoom in on hover; show cover before first hover, then hold paused video frame */
+.pf-media .loop-media-still { animation: none !important; transform: none !important; }
 .pf-media .loop-media-still,
 .pf-media .loop-media-video {
   filter: none;

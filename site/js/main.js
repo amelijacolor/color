@@ -107,6 +107,7 @@ function setPlaying(box, on) {
   if (!box) return;
   box.classList.toggle("is-paused", !on);
   if (on) {
+    box.classList.add("was-played");
     const video = attachVideo(box, true);
     if (video) {
       if (video.readyState >= 2 && video.videoWidth > 0) box.classList.add("has-video");
