@@ -151,6 +151,7 @@ def validate_content(data):
         raise Invalid("Content must be an object")
 
     about = text(data.get("about"), 3000, "About text")
+    about_image = media_path(data.get("about_image"), "About photo")
 
     links_in = data.get("links") or {}
     email = text(links_in.get("email"), 254, "Email", required=True)
@@ -248,6 +249,7 @@ def validate_content(data):
 
     return {
         "about": about,
+        "about_image": about_image,
         "links": {"email": email, "instagram": instagram},
         "hero_slides": hero_slides,
         "before_after": before_after,

@@ -748,6 +748,14 @@
   /* ------------------------------------------------------------------ about */
   function aboutPanel(panel) {
     panel.append(
+      mediaField({
+        label: "About section photo (shown beside your bio)",
+        kind: "image",
+        getValue: () => content.about_image || "assets/images/lucifer.png",
+        setValue: (v) => { content.about_image = v; },
+        slug: () => "about",
+        purpose: "portrait",
+      }),
       textField("About text", content, "about", { multiline: true, rows: 9 }),
       h("div", { class: "row" },
         textField("Contact email (messages from the website are sent here)", content.links, "email", { type: "email" }),
@@ -862,6 +870,7 @@
 
   /* ---------------------------------------------------------------- actions */
   function normalizeContent() {
+    content.about_image = content.about_image || "";
     content.links = content.links || { email: "", instagram: "" };
     content.hero_slides = (content.hero_slides || []).filter((s) => s && s.image);
     content.projects = (content.projects || []).map((p) => ({

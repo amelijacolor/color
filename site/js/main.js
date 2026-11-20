@@ -473,6 +473,8 @@ function initContact() {
 function applyContent() {
   const about = $("#about-body");
   if (about && CONTENT.about) about.textContent = CONTENT.about;
+  const aboutImg = $("#about-img");
+  if (aboutImg && CONTENT.about_image) aboutImg.src = CONTENT.about_image;
   $$("[data-email]").forEach((el) => {
     if (!LINKS.email) return;
     el.href = `mailto:${LINKS.email}`;
