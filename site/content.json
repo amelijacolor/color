@@ -68,17 +68,6 @@
   ],
   "projects": [
     {
-      "slug": "oculus",
-      "title": "Oculus",
-      "format": "Short Film",
-      "camera": "Arri Alexa Mini",
-      "roles": [
-        "Cinematography",
-        "Colour Grading"
-      ],
-      "poster": "assets/images/oculus-graded.png",
-      "preview": "assets/videos/oculus-preview-9d7cd0dd.mp4",
-      "notes": "",
       "festivals_won": 0,
       "laurels": [
         {
@@ -94,20 +83,20 @@
         "assets/videos/oculus-clip-674724ab.mp4",
         "assets/videos/oculus-clip-05b9300c.mp4",
         "assets/videos/oculus-clip-ef60e6bf.mp4"
-      ]
-    },
-    {
-      "slug": "blood-gothika",
-      "title": "Blood Gothika",
-      "format": "Short Film",
-      "camera": "Arri Alexa Mini",
+      ],
       "roles": [
         "Cinematography",
         "Colour Grading"
       ],
-      "poster": "assets/images/blood-gothika.png",
-      "preview": "assets/videos/blood-gothika-preview-0deb9d64.mp4",
-      "notes": "",
+      "slug": "oculus",
+      "title": "Oculus",
+      "format": "Short Film",
+      "camera": "Arri Alexa Mini",
+      "poster": "assets/images/oculus-graded.png",
+      "preview": "assets/videos/oculus-preview-9d7cd0dd.mp4",
+      "notes": ""
+    },
+    {
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -115,19 +104,20 @@
         "assets/videos/blood-gothika-clip-e9901ddf.mp4",
         "assets/videos/blood-gothika-clip-2ad1d855.mp4",
         "assets/videos/blood-gothika-clip-4e151d2b.mp4"
-      ]
+      ],
+      "roles": [
+        "Cinematography",
+        "Colour Grading"
+      ],
+      "slug": "blood-gothika",
+      "title": "Blood Gothika",
+      "format": "Short Film",
+      "camera": "Arri Alexa Mini",
+      "poster": "assets/images/blood-gothika.png",
+      "preview": "assets/videos/blood-gothika-preview-0deb9d64.mp4",
+      "notes": ""
     },
     {
-      "slug": "heartstealer",
-      "title": "Heartstealer",
-      "format": "Short Film",
-      "camera": "Sony FX9",
-      "roles": [
-        "Colorist"
-      ],
-      "poster": "assets/images/heartstealer-cover-a2608a1f.jpg",
-      "preview": "assets/videos/heartstealer-preview-e8d44c2c.mp4",
-      "notes": "",
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -137,20 +127,19 @@
         "assets/videos/heartstealer-clip-ee3580e3.mp4",
         "assets/videos/heartstealer-clip-45fa1ee4.mp4",
         "assets/videos/heartstealer-clip-6d1f4324.mp4"
-      ]
+      ],
+      "roles": [
+        "Colorist"
+      ],
+      "slug": "heartstealer",
+      "title": "Heartstealer",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "poster": "assets/images/heartstealer-cover-a2608a1f.jpg",
+      "preview": "assets/videos/heartstealer-preview-e8d44c2c.mp4",
+      "notes": ""
     },
     {
-      "slug": "hygiene-is-not-a-luxury",
-      "title": "Hygiene Is Not a Luxury",
-      "format": "Kodak Commercial",
-      "camera": "Arri Flex 416 Plus · 16mm 200T",
-      "roles": [
-        "Cinematography",
-        "Colour Grading"
-      ],
-      "poster": "assets/images/hygiene-is-not-a-luxury-cover-6e63803e.jpg",
-      "preview": "assets/videos/hygiene-is-not-a-luxury-preview-1e3d39be.mp4",
-      "notes": "",
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -158,20 +147,20 @@
         "assets/videos/hygiene-is-not-a-luxury-clip-065117de.mp4",
         "assets/videos/hygiene-is-not-a-luxury-clip-cb6ecf13.mp4",
         "assets/videos/hygiene-is-not-a-luxury-clip-b4ab31be.mp4"
-      ]
-    },
-    {
-      "slug": "touch-grass",
-      "title": "Touch Grass",
-      "format": "Short Film",
-      "camera": "Sony FX9",
+      ],
       "roles": [
         "Cinematography",
         "Colour Grading"
       ],
-      "poster": "assets/images/touch-grass.png",
-      "preview": "assets/videos/touch-grass-preview-3bf5c4cf.mp4",
-      "notes": "",
+      "slug": "hygiene-is-not-a-luxury",
+      "title": "Hygiene Is Not a Luxury",
+      "format": "Kodak Commercial",
+      "camera": "Arri Flex 416 Plus · 16mm 200T",
+      "poster": "assets/images/hygiene-is-not-a-luxury-cover-6e63803e.jpg",
+      "preview": "assets/videos/hygiene-is-not-a-luxury-preview-1e3d39be.mp4",
+      "notes": ""
+    },
+    {
       "festivals_won": 0,
       "laurels": [
         {
@@ -208,20 +197,20 @@
         "assets/videos/touch-grass-clip-55d40960.mp4",
         "assets/videos/touch-grass-clip-c4317f68.mp4",
         "assets/videos/touch-grass-clip-a1c1bf9e.mp4"
-      ]
-    },
-    {
-      "slug": "lucifer",
-      "title": "Lucifer",
-      "format": "Music Video",
-      "camera": "Blackmagic Pocket 6K",
+      ],
       "roles": [
         "Cinematography",
         "Colour Grading"
       ],
-      "poster": "assets/images/lucifer.png",
-      "preview": "assets/videos/lucifer-preview-44628120.mp4",
-      "notes": "",
+      "slug": "touch-grass",
+      "title": "Touch Grass",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "poster": "assets/images/touch-grass.png",
+      "preview": "assets/videos/touch-grass-preview-3bf5c4cf.mp4",
+      "notes": ""
+    },
+    {
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -229,19 +218,20 @@
         "assets/videos/lucifer-clip-bf884391.mp4",
         "assets/videos/lucifer-clip-b7d79a1f.mp4",
         "assets/videos/lucifer-clip-7b5ddf3c.mp4"
-      ]
-    },
-    {
-      "slug": "earplugs-from-space",
-      "title": "Sets",
-      "format": "Spec Ad for Sets",
-      "camera": "Arri Alexa Mini & Camcorder",
+      ],
       "roles": [
+        "Cinematography",
         "Colour Grading"
       ],
-      "poster": "assets/images/earplugs-from-space-cover-aa14a4d1.jpg",
-      "preview": "assets/videos/earplugs-from-space-preview-e90dc0e7.mp4",
-      "notes": "",
+      "slug": "lucifer",
+      "title": "Lucifer",
+      "format": "Music Video",
+      "camera": "Blackmagic Pocket 6K",
+      "poster": "assets/images/lucifer.png",
+      "preview": "assets/videos/lucifer-preview-44628120.mp4",
+      "notes": ""
+    },
+    {
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -251,19 +241,19 @@
         "assets/videos/earplugs-from-space-clip-4ff25b00.mp4",
         "assets/videos/earplugs-from-space-clip-78f04463.mp4",
         "assets/videos/earplugs-from-space-clip-a66891a7.mp4"
-      ]
-    },
-    {
-      "slug": "final-card",
-      "title": "Final Card",
-      "format": "Kodak Commercial",
-      "camera": "16mm Film",
+      ],
       "roles": [
         "Colour Grading"
       ],
-      "poster": "assets/images/final-card.png",
-      "preview": "assets/videos/final-card-preview-e7781346.mp4",
-      "notes": "",
+      "slug": "earplugs-from-space",
+      "title": "Sets",
+      "format": "Spec Ad for Sets",
+      "camera": "Arri Alexa Mini & Camcorder",
+      "poster": "assets/images/earplugs-from-space-cover-aa14a4d1.jpg",
+      "preview": "assets/videos/earplugs-from-space-preview-e90dc0e7.mp4",
+      "notes": ""
+    },
+    {
       "festivals_won": 0,
       "laurels": [],
       "clips": [
@@ -271,7 +261,18 @@
         "assets/videos/final-card-clip-e12aaced.mp4",
         "assets/videos/final-card-clip-5ec21117.mp4",
         "assets/videos/final-card-clip-6e3503a8.mp4"
-      ]
+      ],
+      "roles": [
+        "Colour Grading"
+      ],
+      "slug": "final-card",
+      "title": "Final Card",
+      "format": "Kodak Commercial",
+      "camera": "16mm Film",
+      "poster": "assets/images/final-card.png",
+      "preview": "assets/videos/final-card-preview-e7781346.mp4",
+      "notes": ""
     }
-  ]
+  ],
+  "about_image": "assets/images/about-portrait-df6a37cd.jpg"
 }
