@@ -315,8 +315,8 @@ h1, h2, h3, p { margin: 0; }
 .statement-sans,
 .statement-serif {
   text-transform: uppercase;
-  line-height: 0.95;
-  font-size: clamp(2.8rem, 9vw, 8.5rem);
+  line-height: 0.96;
+  font-size: clamp(2rem, 6.2vw, 6.4rem);
 }
 .statement-sans { font-weight: 600; letter-spacing: -0.04em; color: var(--ink-2); }
 .statement-serif { font-family: var(--serif); letter-spacing: -0.03em; color: var(--ink); }
@@ -563,14 +563,48 @@ h1, h2, h3, p { margin: 0; }
   font-size: clamp(2.6rem, 11vw, 10rem);
   line-height: 0.9;
   letter-spacing: -0.03em;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
+
+.pf-filters {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(20px, 3.6vw, 44px);
+  margin-bottom: 22px;
+}
+.pf-filter {
+  position: relative;
+  padding: 4px 0 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  transition: color 0.35s var(--ease);
+}
+.pf-filter::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease);
+}
+.pf-filter:hover,
+.pf-filter.is-active { color: var(--ink); }
+.pf-filter.is-active::after { transform: scaleX(1); }
 
 .pf-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-top: 1px solid var(--line);
+  transition: opacity 0.28s ease;
 }
+.pf-grid.is-switching { opacity: 0; }
 .pf-card {
   display: flex;
   flex-direction: column;

@@ -534,7 +534,8 @@
           textField("Format", p, "format", { placeholder: "Short Film, Music Video, Kodak Commercial…" })),
         h("div", { class: "row" },
           textField("Camera / stock", p, "camera", { placeholder: "Arri Alexa Mini" }),
-          h("label", { class: "f" }, h("span", {}, "Your role (comma separated)"), rolesInput)),
+          h("label", { class: "f" }, h("span", {}, "Your role (comma separated)"), rolesInput,
+            h("div", { class: "hint" }, 'Use "Cinematographer" and/or "Colorist" to match the Portfolio filters.'))),
         textField("Notes (shown on the film's page)", p, "notes", { multiline: true, rows: 4, placeholder: "A few lines about the project and your grade…" })),
 
       laurelsSection(p),

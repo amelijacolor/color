@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ameli Mor — Colorist</title>
-  <meta name="description" content="Colour grading by Ameli Mor." />
+  <title>Ameli Mor — Colorist &amp; Cinematographer</title>
+  <meta name="description" content="Colorist and cinematographer Ameli Mor." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
 </head>
 <body>
   <div id="grain" aria-hidden="true"></div>
@@ -38,17 +38,18 @@
         </span>
       </h1>
       <div class="hero-meta">
-        <span>Colorist</span>
+        <span>Colorist &amp; Cinematographer</span>
         <span>&copy; 2026 Ameli Mor</span>
         <span class="hero-now-wrap"><span id="hero-now">&nbsp;</span></span>
       </div>
     </section>
 
     <section class="statement" aria-label="Statement">
-      <p class="statement-sans reveal">Colour is</p>
-      <p class="statement-serif reveal">felt first.</p>
+      <p class="statement-sans reveal">Beyond the frame,</p>
+      <p class="statement-serif reveal">Beyond the ordinary.</p>
       <div class="statement-row reveal">
-        <span>Colour Grading</span>
+        <span>Colorist</span>
+        <span>Cinematographer</span>
         <span>DaVinci Resolve</span>
       </div>
     </section>
@@ -103,6 +104,11 @@
   <main id="view-portfolio" class="view" hidden>
     <section class="pf-head">
       <h1 class="pf-title">Portfolio</h1>
+      <div class="pf-filters" id="pf-filters" role="tablist" aria-label="Filter portfolio by role">
+        <button type="button" class="pf-filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button type="button" class="pf-filter" data-filter="cinematography" role="tab" aria-selected="false">Cinematography</button>
+        <button type="button" class="pf-filter" data-filter="colorist" role="tab" aria-selected="false">Colorist</button>
+      </div>
       <p class="eyebrow dim" id="pf-count">10 films &middot; hover to play</p>
     </section>
     <section class="pf-grid" id="pf-grid" aria-label="Films"></section>
@@ -150,6 +156,6 @@
     </div>
   </footer>
 
-  <script type="module" src="js/main.js?v=6"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

@@ -272,41 +272,85 @@ function initCompare() {
 }
 
 /* ==========================================================================
-   Portfolio page
+   Portfolio page (with All / Cinematography / Colorist filters)
    ========================================================================== */
+function matchesFilter(project, filter) {
+  if (filter === "all") return true;
+  const roles = (project.roles || []).join(" ");
+  if (filter === "cinematography") return /cinematograph|\bdop\b|\bdp\b/i.test(roles);
+  if (filter === "colorist") return /colou?r|grad/i.test(roles);
+  return true;
+}
+
 function initPortfolio() {
   const grid = $("#pf-grid");
   const countEl = $("#pf-count");
-  if (countEl) {
-    countEl.textContent = `${PROJECTS.length} ${PROJECTS.length === 1 ? "film" : "films"} · hover to play`;
+  const filterBtns = $$(".pf-filter");
+  let activeFilter = "all";
+
+  function renderGrid(animate = false) {
+    const items = PROJECTS.filter((p) => matchesFilter(p, activeFilter));
+    if (countEl) {
+      countEl.textContent = `${items.length} ${items.length === 1 ? "film" : "films"} · hover to play`;
+    }
+
+    const paint = () => {
+      grid.innerHTML = items.map((p, i) => {
+        const festSum = festivalSummary(p);
+        return `
+        <a class="pf-card ${animate ? "" : "reveal"}" href="#/project/${esc(p.slug)}" data-slug="${esc(p.slug)}" data-title="${esc(p.title)}">
+          <div class="pf-media">
+            ${loopMedia({ src: p.preview, poster: p.poster, variant: i, alt: p.title })}
+          </div>
+          <div class="pf-meta">
+            <div class="pf-row"><span class="pf-name">${esc(p.title)}</span><span class="pf-format">${esc(p.format)}</span></div>
+            <div class="pf-camera">${esc(p.camera)}</div>
+            ${festSum ? `<div class="pf-fest-count">${esc(festSum)}</div>` : ""}
+            ${(p.laurels || []).length ? `<div class="pf-laurels">${p.laurels.map(laurelRow).join("")}</div>` : ""}
+          </div>
+        </a>`;
+      }).join("");
+
+      wireMedia(grid);
+      if (!$("#view-portfolio").hidden) warmPortfolioVideos();
+
+      $$(".pf-card", grid).forEach((card) => {
+        const box = $(".loop-media", card);
+        const on = () => setPlaying(box, true);
+        const off = () => setPlaying(box, false);
+        card.addEventListener("mouseenter", on);
+        card.addEventListener("mouseleave", off);
+        card.addEventListener("focus", on);
+        card.addEventListener("blur", off);
+      });
+    };
+
+    if (animate) {
+      grid.classList.add("is-switching");
+      setTimeout(() => {
+        paint();
+        requestAnimationFrame(() => grid.classList.remove("is-switching"));
+      }, 220);
+    } else {
+      paint();
+    }
   }
-  grid.innerHTML = PROJECTS.map((p, i) => {
-    const festSum = festivalSummary(p);
-    return `
-    <a class="pf-card reveal" href="#/project/${esc(p.slug)}" data-slug="${esc(p.slug)}" data-title="${esc(p.title)}">
-      <div class="pf-media">
-        ${loopMedia({ src: p.preview, poster: p.poster, variant: i, alt: p.title })}
-      </div>
-      <div class="pf-meta">
-        <div class="pf-row"><span class="pf-name">${esc(p.title)}</span><span class="pf-format">${esc(p.format)}</span></div>
-        <div class="pf-camera">${esc(p.camera)}</div>
-        ${festSum ? `<div class="pf-fest-count">${esc(festSum)}</div>` : ""}
-        ${(p.laurels || []).length ? `<div class="pf-laurels">${p.laurels.map(laurelRow).join("")}</div>` : ""}
-      </div>
-    </a>`;
-  }).join("");
 
-  wireMedia(grid);
-
-  $$(".pf-card", grid).forEach((card) => {
-    const box = $(".loop-media", card);
-    const on = () => setPlaying(box, true);
-    const off = () => setPlaying(box, false);
-    card.addEventListener("mouseenter", on);
-    card.addEventListener("mouseleave", off);
-    card.addEventListener("focus", on);
-    card.addEventListener("blur", off);
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = btn.dataset.filter || "all";
+      if (next === activeFilter) return;
+      activeFilter = next;
+      filterBtns.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      renderGrid(true);
+    });
   });
+
+  renderGrid(false);
 }
 
 /* ==========================================================================
