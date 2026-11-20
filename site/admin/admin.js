@@ -634,8 +634,7 @@
         if (slides.length >= 30) { toast("Maximum 30 opening reel images", true); break; }
         try {
           const path = await uploader(file, "image", "hero", "reel", () => {});
-          const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
-          slides.push({ image: path, label: baseName });
+          slides.push({ image: path, label: "" });
           markDirty();
         } catch (e) {
           toast(e.message, true);

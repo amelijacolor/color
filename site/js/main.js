@@ -3,11 +3,11 @@ const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 
 async function loadContent() {
   try {
-    const r = await fetch("content.json", { cache: "no-store" });
+    const r = await fetch(`content.json?t=${Date.now()}`, { cache: "no-store" });
     if (!r.ok) throw new Error("content");
     return await r.json();
   } catch (_) {
-    return { about: "", links: { email: "", instagram: "" }, before_after: [], projects: [] };
+    return { about: "", about_image: "", links: { email: "", instagram: "" }, before_after: [], projects: [] };
   }
 }
 const CONTENT = await loadContent();
@@ -19,41 +19,24 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
 /* ==========================================================================
-   Film grain — fine and constant
+   Film grain — pre-baked single noise tile shifted on GPU (zero CPU loop)
    ========================================================================== */
 function initGrain() {
-  const canvas = $("#grain");
-  const ctx = canvas.getContext("2d");
-  const size = 200;
+  const el = $("#grain");
+  if (!el) return;
+  const size = 180;
   const tile = document.createElement("canvas");
   tile.width = tile.height = size;
   const tctx = tile.getContext("2d");
   const img = tctx.createImageData(size, size);
-
-  const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; };
-  const draw = () => {
-    const d = img.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const light = Math.random() < 0.5;
-      d[i] = d[i + 1] = d[i + 2] = light ? 245 : 10;
-      d[i + 3] = (Math.random() * 190) | 0;
-    }
-    tctx.putImageData(img, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = ctx.createPattern(tile, "repeat");
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  };
-
-  resize();
-  addEventListener("resize", resize);
-  draw();
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  let last = 0;
-  const loop = (t) => {
-    if (t - last > 110) { last = t; draw(); }
-    requestAnimationFrame(loop);
-  };
-  requestAnimationFrame(loop);
+  const d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const light = Math.random() < 0.5;
+    d[i] = d[i + 1] = d[i + 2] = light ? 245 : 10;
+    d[i + 3] = (Math.random() * 190) | 0;
+  }
+  tctx.putImageData(img, 0, 0);
+  el.style.backgroundImage = `url(${tile.toDataURL("image/png")})`;
 }
 
 /* ==========================================================================
@@ -70,34 +53,45 @@ function armReveals(root) {
 }
 
 /* ==========================================================================
-   Loop media: a real <video> when the .mp4 exists, otherwise a slow moving still
+   Loop media: shows chosen cover image at rest; lazy-loads & plays <video> on demand
    ========================================================================== */
 function loopMedia({ src, poster, variant = 0, playing = false, alt = "" }) {
   return `
     <div class="loop-media v${variant % 4} ${playing ? "" : "is-paused"}" data-src="${esc(src)}">
-      <img class="loop-media-still" src="${esc(poster)}" alt="${esc(alt)}" />
-      <video class="loop-media-video" muted loop playsinline preload="metadata"></video>
+      <img class="loop-media-still" src="${esc(poster)}" alt="${esc(alt)}" loading="lazy" decoding="async" />
+      <video class="loop-media-video" muted loop playsinline preload="none" poster="${esc(poster)}"></video>
     </div>`;
+}
+
+function loadVideo(box) {
+  const video = $("video", box);
+  if (!video || video.dataset.loaded || !box.dataset.src) return;
+  video.dataset.loaded = "1";
+  video.addEventListener("loadeddata", () => {
+    if (video.videoWidth > 0) {
+      box.classList.add("has-video");
+      if (!box.classList.contains("is-paused")) video.play().catch(() => {});
+    }
+  });
+  video.src = box.dataset.src;
 }
 
 function wireMedia(root) {
   $$(".loop-media", root).forEach((box) => {
-    const video = $("video", box);
-    video.addEventListener("loadeddata", () => {
-      if (video.videoWidth > 0) {
-        box.classList.add("has-video");
-        if (!box.classList.contains("is-paused")) video.play().catch(() => {});
-      }
-    });
-    video.src = box.dataset.src;
+    // Only auto-load videos that are meant to play immediately (project pages);
+    // portfolio hover previews load lazily on hover so Home & Portfolio stay fast.
+    if (!box.classList.contains("is-paused")) {
+      loadVideo(box);
+    }
   });
 }
 
 function setPlaying(box, on) {
   if (!box) return;
   box.classList.toggle("is-paused", !on);
+  if (on) loadVideo(box);
   const video = $("video", box);
-  if (box.classList.contains("has-video")) {
+  if (video && box.classList.contains("has-video")) {
     if (on) video.play().catch(() => {});
     else video.pause();
   }
@@ -137,7 +131,7 @@ function festivalSummary(p) {
 }
 
 /* ==========================================================================
-   Home: hero reel (cross-fades through chosen Opening Reel images, or film covers)
+   Home: hero reel (cross-fades through Opening Reel images & rolls film titles)
    ========================================================================== */
 function initHero() {
   const frame = $("#hero-frame");
@@ -147,14 +141,29 @@ function initHero() {
     : PROJECTS.map((p) => ({ image: p.poster, label: p.title }));
   if (!slides.length) return;
 
-  frame.innerHTML = slides.map((s) => `<img src="${esc(s.image)}" alt="${esc(s.label || "Ameli Mor")}" />`).join("");
+  const isAutoFilename = (s) => /^(IMG|Still|DSC|Screenshot|Frame|PXL|CleanShot)\b/i.test(String(s || "").trim());
+  const filmNames = PROJECTS.map((p) => p.title).filter(Boolean);
+
+  frame.innerHTML = slides.map((s, idx) =>
+    `<img src="${esc(s.image)}" alt="${esc(filmNames[idx % Math.max(1, filmNames.length)] || "Ameli Mor")}" decoding="async" />`
+  ).join("");
   const imgs = $$("img", frame);
   let i = 0;
+  let nameIdx = 0;
+
+  const getLabel = (n) => {
+    const custom = slides[n] && slides[n].label && !isAutoFilename(slides[n].label) ? slides[n].label : "";
+    if (custom) return `${String(n + 1).padStart(2, "0")} — ${custom}`;
+    if (filmNames.length) {
+      const k = nameIdx % filmNames.length;
+      return `${String(k + 1).padStart(2, "0")} — ${filmNames[k]}`;
+    }
+    return String(n + 1).padStart(2, "0");
+  };
 
   const show = (n, immediate = false) => {
     imgs.forEach((im, k) => im.classList.toggle("is-on", k === n));
-    const num = String(n + 1).padStart(2, "0");
-    const label = slides[n].label ? `${num} — ${slides[n].label}` : num;
+    const label = getLabel(n);
     if (immediate) {
       now.textContent = label;
       return;
@@ -166,33 +175,55 @@ function initHero() {
     }, 220);
   };
   show(0, true);
-  if (imgs.length > 1) {
+  if (imgs.length > 1 || filmNames.length > 1) {
     setInterval(() => {
       if ($("#view-home").hidden || document.hidden) return;
       i = (i + 1) % imgs.length;
+      nameIdx = (nameIdx + 1) % Math.max(1, filmNames.length);
       show(i);
     }, 2600);
   }
 
-  // Smooth mouse & scroll counter-parallax on the opening hero
+  // Smooth mouse & scroll counter-parallax (only runs while hero is in view)
   const hero = $(".hero");
-  if (!hero || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!hero || matchMedia("(prefers-reduced-motion: reduce)").matches || !matchMedia("(hover: hover)").matches) return;
   let tx = 0, ty = 0, cx = 0, cy = 0;
+  let running = false;
+
+  const wake = () => {
+    if (!running) {
+      running = true;
+      requestAnimationFrame(tick);
+    }
+  };
+
   addEventListener("mousemove", (e) => {
+    if ($("#view-home").hidden || scrollY > innerHeight) return;
     tx = (e.clientX / innerWidth - 0.5) * 2;
     ty = (e.clientY / innerHeight - 0.5) * 2;
-  });
+    wake();
+  }, { passive: true });
+
+  addEventListener("scroll", () => {
+    if ($("#view-home").hidden || scrollY > innerHeight + 40) return;
+    hero.style.setProperty("--sy", Math.min(scrollY, innerHeight).toFixed(0));
+  }, { passive: true });
+
   const tick = () => {
-    if (!$("#view-home").hidden) {
-      cx += (tx - cx) * 0.06;
-      cy += (ty - cy) * 0.06;
-      hero.style.setProperty("--mx", cx.toFixed(3));
-      hero.style.setProperty("--my", cy.toFixed(3));
-      hero.style.setProperty("--sy", Math.min(scrollY, innerHeight).toFixed(0));
+    if ($("#view-home").hidden || scrollY > innerHeight) {
+      running = false;
+      return;
     }
-    requestAnimationFrame(tick);
+    cx += (tx - cx) * 0.07;
+    cy += (ty - cy) * 0.07;
+    hero.style.setProperty("--mx", cx.toFixed(3));
+    hero.style.setProperty("--my", cy.toFixed(3));
+    if (Math.abs(tx - cx) > 0.002 || Math.abs(ty - cy) > 0.002) {
+      requestAnimationFrame(tick);
+    } else {
+      running = false;
+    }
   };
-  requestAnimationFrame(tick);
 }
 
 /* ==========================================================================
@@ -504,8 +535,16 @@ function initCursor() {
   let wobble = 0;
   let wobbleVel = 0;
   let started = false;
-  let frame = 0;
+  let running = false;
   let currentBlock = null;
+  let scrollPending = false;
+
+  const wake = () => {
+    if (!running) {
+      running = true;
+      requestAnimationFrame(tick);
+    }
+  };
 
   const updateState = (target) => {
     if (!target || !target.closest) return;
@@ -527,6 +566,7 @@ function initCursor() {
       if (block !== currentBlock) {
         currentBlock = block;
         wobbleVel += 0.14;
+        wake();
       }
       main.classList.add("is-view");
       main.classList.remove("is-link");
@@ -536,6 +576,7 @@ function initCursor() {
       if (cmp !== currentBlock) {
         currentBlock = cmp;
         wobbleVel += 0.12;
+        wake();
       }
       main.classList.add("is-view");
       main.classList.remove("is-link");
@@ -565,7 +606,20 @@ function initCursor() {
       main.classList.add("is-visible");
     }
     updateState(e.target);
-  });
+    wake();
+  }, { passive: true });
+
+  // Only check element under pointer on scroll (throttled) and route change — never inside 60fps rAF
+  const syncAtPointer = () => {
+    if (!started || tx < 0 || ty < 0) return;
+    updateState(document.elementFromPoint(tx, ty));
+  };
+  addEventListener("scroll", () => {
+    if (scrollPending) return;
+    scrollPending = true;
+    setTimeout(() => { scrollPending = false; syncAtPointer(); }, 120);
+  }, { passive: true });
+  addEventListener("hashchange", () => setTimeout(syncAtPointer, 60));
 
   document.addEventListener("mouseleave", () => {
     main.classList.remove("is-visible");
@@ -578,14 +632,12 @@ function initCursor() {
   const tick = (now) => {
     const isBig = main.classList.contains("is-view");
 
-    // Larger liquid drop has slightly more inertia for a heavier, silkier glide
     const followRate = isBig ? 0.13 : 0.16;
     const vx = (tx - cx) * followRate;
     const vy = (ty - cy) * followRate;
     cx += vx;
     cy += vy;
 
-    // Smooth the 2D velocity vector itself (Cartesian smoothing prevents sudden angle flips)
     const vecLerp = isBig ? 0.11 : 0.16;
     svx += (vx - svx) * vecLerp;
     svy += (vy - svy) * vecLerp;
@@ -595,12 +647,10 @@ function initCursor() {
       angle = Math.atan2(svy, svx);
     }
 
-    // Gentle damped surface-tension ripple when switching blocks
     wobbleVel += -wobble * 0.11;
     wobbleVel *= 0.84;
     wobble += wobbleVel;
 
-    // Speed-dependent stretch: nearly round when slow, smooth liquid stretch when fast
     const maxRef = isBig ? 14 : 11;
     const norm = Math.min(1, vecSpeed / maxRef);
     const maxStretch = isBig ? 0.34 : 0.52;
@@ -610,7 +660,6 @@ function initCursor() {
     const sx = Math.max(0.84, 1 + stretch + wobble * 0.25);
     const sy = Math.max(0.68, 1 - squash - wobble * 0.22);
 
-    // Subtle organic liquid boundary slosh (proportional to smooth 2D speed, 50% at rest/turnaround)
     const slosh = Math.sin(now * 0.008) * norm * 3.5;
     const tail = norm * (isBig ? 9 : 13);
     const r1 = 50 + tail + slosh;
@@ -625,12 +674,18 @@ function initCursor() {
     textWrap.style.transform =
       `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
 
-    if (started && ++frame % 6 === 0) {
-      updateState(document.elementFromPoint(tx, ty));
+    const settled =
+      Math.hypot(tx - cx, ty - cy) < 0.2 &&
+      vecSpeed < 0.05 &&
+      Math.abs(wobble) < 0.004 &&
+      Math.abs(wobbleVel) < 0.004;
+
+    if (settled) {
+      running = false;
+    } else {
+      requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
   };
-  requestAnimationFrame(tick);
 }
 
 /* ==========================================================================
