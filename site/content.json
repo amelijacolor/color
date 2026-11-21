@@ -90,7 +90,7 @@
           "festival": "Citylights Film Festival",
           "distinction": "Official Selection",
           "year": "2026",
-          "qualifying": "",
+          "qualifying": "BIFA",
           "won": false
         }
       ],
@@ -189,7 +189,7 @@
           "festival": "Brighton Rocks Film Festival",
           "distinction": "Official Selection",
           "year": "2026",
-          "qualifying": "",
+          "qualifying": "BIFA",
           "won": false
         },
         {
@@ -248,8 +248,16 @@
       "notes": ""
     },
     {
-      "festivals_won": 0,
-      "laurels": [],
+      "festivals_won": 1,
+      "laurels": [
+        {
+          "festival": "Women X Film Festival",
+          "distinction": "Honourable Mention",
+          "year": "2026",
+          "qualifying": "BIFA & BAFTA",
+          "won": false
+        }
+      ],
       "clips": [
         "assets/videos/natural-order-of-things-clip-e78ac96c.mp4",
         "assets/videos/natural-order-of-things-clip-0bc922f6.mp4",
@@ -268,8 +276,16 @@
       "notes": ""
     },
     {
-      "festivals_won": 0,
-      "laurels": [],
+      "festivals_won": 1,
+      "laurels": [
+        {
+          "festival": "Fright Nights",
+          "distinction": "Official Selection",
+          "year": "2025",
+          "qualifying": "",
+          "won": false
+        }
+      ],
       "clips": [
         "assets/videos/predator-clip-9fa7a776.mp4",
         "assets/videos/predator-clip-df882fbf.mp4",
