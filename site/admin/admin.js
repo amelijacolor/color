@@ -14,6 +14,10 @@
   let tab = "films";
   let dirty = false;
   let activeUploads = 0;
+  let deployState = null; // { kind: "idle"|"running"|"ok"|"fail"|"unknown", label, url, title }
+  let deployTimer = null;
+  let watchingSha = null;
+  let watchingSince = 0;
   const open = new Set();
   const blobPreviews = new Map(); // relPath -> objectURL for immediate preview before Pages rebuilds
   const pendingBlobs = new Map(); // repoPath -> git blob sha (committed atomically on Save & Publish)
@@ -251,17 +255,17 @@
         });
         gh.contentSha = contentBlob.sha;
         pendingBlobs.clear();
+        return newCommit.sha;
       };
       try {
-        await commitAtomically();
+        return await commitAtomically();
       } catch (err) {
         if (err && (err.status === 409 || err.status === 422)) {
-          await commitAtomically();
+          return await commitAtomically();
         } else {
           throw err;
         }
       }
-      return;
     }
 
     const putWithSha = async (sha) => {
@@ -272,15 +276,16 @@
         content: encoded,
       });
       gh.contentSha = res.content.sha;
+      return res.commit ? res.commit.sha : null;
     };
 
     try {
       const sha = gh.contentSha || (await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`)).sha;
-      await putWithSha(sha);
+      return await putWithSha(sha);
     } catch (err) {
       if (err && err.status === 409) {
         const fresh = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(gh.branch)}&_=${Date.now()}`);
-        await putWithSha(fresh.sha);
+        return await putWithSha(fresh.sha);
       } else {
         throw err;
       }
@@ -326,8 +331,166 @@
   async function ghRestoreCommit(sha) {
     const file = await ghReq(`/repos/${gh.owner}/${gh.repo}/contents/site/content.json?ref=${encodeURIComponent(sha)}`);
     const restored = JSON.parse(base64ToUtf8(file.content));
-    await ghSaveContent(restored, `Restore content from ${sha.slice(0, 7)}`);
+    const newSha = await ghSaveContent(restored, `Restore content from ${sha.slice(0, 7)}`);
+    startDeployWatch(newSha);
     return restored;
+  }
+
+  /* --------------------------------------------------- live GitHub deploy UI */
+  function stopDeployWatch() {
+    if (deployTimer) {
+      clearTimeout(deployTimer);
+      deployTimer = null;
+    }
+  }
+
+  function updateDeployPillDOM() {
+    const el = document.getElementById("deploy-pill");
+    if (!el || !deployState) return;
+    el.className = "deploy-pill" + (deployState.kind && deployState.kind !== "idle" ? ` is-${deployState.kind}` : "");
+    el.href = deployState.url || `https://github.com/${gh.owner}/${gh.repo}/actions`;
+    el.title = deployState.title || "Open GitHub Actions deployment status";
+    const text = el.querySelector(".deploy-text");
+    if (text) text.textContent = deployState.label;
+  }
+
+  function deployPillNode() {
+    if (mode !== "github" || !gh) return null;
+    const st = deployState || {
+      kind: "idle",
+      label: "Checking deploy…",
+      url: `https://github.com/${gh.owner}/${gh.repo}/actions`,
+      title: "Live GitHub Pages deployment status",
+    };
+    return h("a", {
+      id: "deploy-pill",
+      class: "deploy-pill" + (st.kind && st.kind !== "idle" ? ` is-${st.kind}` : ""),
+      href: st.url,
+      target: "_blank",
+      rel: "noopener noreferrer",
+      title: st.title,
+    }, h("i", { class: "deploy-dot" }), h("span", { class: "deploy-text" }, st.label));
+  }
+
+  async function ghFetchLatestRun() {
+    const url = `https://api.github.com/repos/${gh.owner}/${gh.repo}/actions/runs?branch=${encodeURIComponent(gh.branch)}&per_page=5&_=${Date.now()}`;
+    let res = await fetch(url, {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${gh.token}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
+    // Fine-grained PATs scoped only to Contents return 403 on /actions/runs;
+    // retry anonymously so public repos still show live deploy status!
+    if (res.status === 401 || res.status === 403) {
+      res = await fetch(url, {
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json" },
+      });
+    }
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    const data = await res.json();
+    return (data.workflow_runs || []);
+  }
+
+  async function ghCheckDeploy(notifyOnDone = false) {
+    if (mode !== "github" || !gh) return;
+    stopDeployWatch();
+    try {
+      const runs = await ghFetchLatestRun();
+      const target = watchingSha
+        ? runs.find((r) => r.head_sha === watchingSha) || null
+        : runs[0] || null;
+
+      // If we just published and GitHub hasn't created the run yet (usually 2–8s), keep polling
+      if (watchingSha && !target) {
+        if (Date.now() - watchingSince < 90_000) {
+          deployState = {
+            kind: "running",
+            label: "Deploying…",
+            url: `https://github.com/${gh.owner}/${gh.repo}/actions`,
+            title: `Waiting for GitHub Actions to start deploy for ${watchingSha.slice(0, 7)}…`,
+          };
+          updateDeployPillDOM();
+          deployTimer = setTimeout(() => ghCheckDeploy(true), 4000);
+          return;
+        }
+        watchingSha = null;
+      }
+
+      const run = target || runs[0];
+      if (!run) {
+        deployState = {
+          kind: "idle",
+          label: "No deploys yet",
+          url: `https://github.com/${gh.owner}/${gh.repo}/actions`,
+          title: "Open GitHub Actions",
+        };
+        updateDeployPillDOM();
+        return;
+      }
+
+      const when = new Date(run.updated_at || run.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      if (run.status !== "completed") {
+        deployState = {
+          kind: "running",
+          label: run.status === "queued" ? "Deploy queued…" : "Deploying…",
+          url: run.html_url,
+          title: `GitHub Actions is ${run.status} (${run.head_sha.slice(0, 7)}) — click to view`,
+        };
+        updateDeployPillDOM();
+        deployTimer = setTimeout(() => ghCheckDeploy(notifyOnDone || Boolean(watchingSha)), 5000);
+      } else if (run.conclusion === "success") {
+        deployState = {
+          kind: "ok",
+          label: `Live · ${when}`,
+          url: run.html_url,
+          title: `Deployed successfully (${run.head_sha.slice(0, 7)}) at ${when} — click to view`,
+        };
+        updateDeployPillDOM();
+        if (notifyOnDone || watchingSha) {
+          watchingSha = null;
+          toast("Live site deployed ✓");
+        }
+      } else {
+        deployState = {
+          kind: "fail",
+          label: `Deploy ${run.conclusion || "failed"} ↗`,
+          url: run.html_url,
+          title: `GitHub deploy ${run.conclusion || "failed"} (${run.head_sha.slice(0, 7)}) — click to inspect or re-run`,
+        };
+        updateDeployPillDOM();
+        if (notifyOnDone || watchingSha) {
+          watchingSha = null;
+          toast(`GitHub deploy ${run.conclusion || "failed"} — click the red status pill to view`, true);
+        }
+      }
+    } catch (_) {
+      deployState = {
+        kind: "idle",
+        label: "Actions ↗",
+        url: `https://github.com/${gh.owner}/${gh.repo}/actions`,
+        title: "Open GitHub Actions to check deployment status",
+      };
+      updateDeployPillDOM();
+    }
+  }
+
+  function startDeployWatch(commitSha) {
+    if (mode !== "github" || !gh) return;
+    watchingSha = commitSha || null;
+    watchingSince = Date.now();
+    deployState = {
+      kind: "running",
+      label: "Deploying…",
+      url: `https://github.com/${gh.owner}/${gh.repo}/actions`,
+      title: "Waiting for GitHub Pages to build and deploy…",
+    };
+    updateDeployPillDOM();
+    stopDeployWatch();
+    deployTimer = setTimeout(() => ghCheckDeploy(true), 3500);
   }
 
   function validateLocal(data) {
@@ -482,6 +645,7 @@
         saveStoredGh(gh, rememberIn.checked);
         normalizeContent();
         shell();
+        ghCheckDeploy(false);
       } catch (ex) {
         gh = null;
         err.textContent = ex.message;
@@ -548,9 +712,10 @@
       h("main", { class: "main" },
         h("div", { class: "topbar" },
           h("h2", {}, titles[tab]),
-          canSave ? h("div", { class: "top-actions" },
-            h("span", { id: "dirty", class: "dirty" + (dirty ? " on" : "") }, dirty ? "Unsaved changes" : "All changes saved"),
-            h("button", { class: "btn", id: "save", onclick: save }, mode === "github" ? "Save & Publish" : "Save")) : null),
+          (canSave || mode === "github") ? h("div", { class: "top-actions" },
+            deployPillNode(),
+            canSave ? h("span", { id: "dirty", class: "dirty" + (dirty ? " on" : "") }, dirty ? "Unsaved changes" : "All changes saved") : null,
+            canSave ? h("button", { class: "btn", id: "save", onclick: save }, mode === "github" ? "Save & Publish" : "Save") : null) : null),
         h("div", { id: "panel" }))));
     renderPanel();
   }
@@ -1079,9 +1244,12 @@
         dirty = false;
         toast("Saved ✓ Preview updated");
       } else {
-        await ghSaveContent(content);
+        const commitSha = await ghSaveContent(content);
         dirty = false;
-        toast("Published to GitHub ✓ Live site updates in ~30–60s");
+        toast("Saved to GitHub ✓ Watching live deploy…");
+        shell();
+        startDeployWatch(commitSha);
+        return;
       }
       shell();
     } catch (e) {
@@ -1098,6 +1266,9 @@
       csrf = null; content = null;
       await boot();
     } else {
+      stopDeployWatch();
+      deployState = null;
+      watchingSha = null;
       saveStoredGh(null, false);
       gh = null; content = null;
       githubAuthScreen();
@@ -1134,7 +1305,9 @@
       try {
         content = await ghLoadContent();
         normalizeContent();
-        return shell();
+        shell();
+        ghCheckDeploy(false);
+        return;
       } catch (e) {
         saveStoredGh(null, false);
         gh = null;

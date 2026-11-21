@@ -48,9 +48,42 @@ h1, h2, h3, p { margin: 0; }
 .main { padding: 0 clamp(20px, 4vw, 56px) 120px; max-width: 1020px; width: 100%; }
 .topbar { position: sticky; top: 0; z-index: 10; background: rgba(11,11,11,0.92); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
 .topbar h2 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; }
-.top-actions { display: flex; align-items: center; gap: 14px; }
+.top-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
 .dirty { color: var(--ink-2); font-size: 0.85rem; }
 .dirty.on { color: #ffd479; }
+.deploy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.deploy-pill:hover { border-color: var(--ink-3); color: var(--ink); }
+.deploy-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  flex: none;
+}
+.deploy-pill.is-ok { border-color: rgba(126, 226, 168, 0.32); color: var(--ok); }
+.deploy-pill.is-ok .deploy-dot { background: var(--ok); }
+.deploy-pill.is-running { border-color: rgba(255, 212, 121, 0.38); color: #ffd479; }
+.deploy-pill.is-running .deploy-dot { background: #ffd479; animation: deployPulse 1.3s ease-in-out infinite; }
+.deploy-pill.is-fail { border-color: rgba(255, 123, 114, 0.45); color: var(--danger); background: rgba(255, 123, 114, 0.08); }
+.deploy-pill.is-fail .deploy-dot { background: var(--danger); }
+@keyframes deployPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
 
 /* ---------- controls ---------- */
 .btn { background: var(--paper); color: #000; border: 0; border-radius: 8px; padding: 10px 18px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
