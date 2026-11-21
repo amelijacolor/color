@@ -587,6 +587,8 @@ h1, h2, h3, p { margin: 0; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
+}
+.about-image img.is-bw {
   filter: grayscale(1) contrast(1.05);
 }
 

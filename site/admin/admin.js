@@ -895,15 +895,33 @@
 
   /* ------------------------------------------------------------------ about */
   function aboutPanel(panel) {
+    const isBw = Boolean(content.about_image_bw);
+    const photoField = mediaField({
+      label: "About section photo (shown beside your bio)",
+      kind: "image",
+      getValue: () => content.about_image || "assets/images/lucifer.png",
+      setValue: (v) => { content.about_image = v; },
+      slug: () => "about",
+      purpose: "portrait",
+    });
+    if (isBw) {
+      const thumb = photoField.querySelector("img.thumb");
+      if (thumb) thumb.style.filter = "grayscale(1) contrast(1.05)";
+    }
+
+    const setBw = (nextBw) => {
+      content.about_image_bw = nextBw;
+      markDirty();
+      renderPanel();
+    };
+
     panel.append(
-      mediaField({
-        label: "About section photo (shown beside your bio)",
-        kind: "image",
-        getValue: () => content.about_image || "assets/images/lucifer.png",
-        setValue: (v) => { content.about_image = v; },
-        slug: () => "about",
-        purpose: "portrait",
-      }),
+      photoField,
+      h("div", { style: "margin: -2px 0 20px" },
+        h("span", { class: "lbl" }, "About photo style"),
+        h("div", { class: "role-checks", style: "margin-bottom:0" },
+          h("button", { type: "button", class: "role-chip" + (!isBw ? " is-on" : ""), onclick: () => setBw(false) }, "Colour"),
+          h("button", { type: "button", class: "role-chip" + (isBw ? " is-on" : ""), onclick: () => setBw(true) }, "Black & White"))),
       textField("About text", content, "about", { multiline: true, rows: 9 }),
       h("div", { class: "row" },
         textField("Contact email (messages from the website are sent here)", content.links, "email", { type: "email" }),
@@ -1019,6 +1037,7 @@
   /* ---------------------------------------------------------------- actions */
   function normalizeContent() {
     content.about_image = content.about_image || "";
+    content.about_image_bw = Boolean(content.about_image_bw);
     content.links = content.links || { email: "", instagram: "" };
     content.hero_slides = (content.hero_slides || []).filter((s) => s && s.image);
     content.projects = (content.projects || []).map((p) => ({

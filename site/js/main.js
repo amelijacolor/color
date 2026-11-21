@@ -584,7 +584,10 @@ function applyContent() {
     about.innerHTML = paras.map((p) => `<span class="about-p">${esc(p)}</span>`).join("");
   }
   const aboutImg = $("#about-img");
-  if (aboutImg && CONTENT.about_image) aboutImg.src = CONTENT.about_image;
+  if (aboutImg) {
+    if (CONTENT.about_image) aboutImg.src = CONTENT.about_image;
+    aboutImg.classList.toggle("is-bw", Boolean(CONTENT.about_image_bw));
+  }
   $$("[data-email]").forEach((el) => {
     if (!LINKS.email) return;
     el.href = `mailto:${LINKS.email}`;
