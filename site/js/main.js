@@ -418,7 +418,10 @@ function renderProject(slug) {
 
     <a class="pj-next" href="#/project/${esc(next.slug)}" data-title="${esc(next.title)}">
       <span class="eyebrow dim">Next up</span>
-      <div class="pj-next-title">${esc(next.title)}</div>
+      <div class="pj-next-row">
+        <div class="pj-next-title">${esc(next.title)}</div>
+        <span class="pj-next-arrow" aria-hidden="true">&rarr;</span>
+      </div>
     </a>`;
 
   wireMedia($("#view-project"));
