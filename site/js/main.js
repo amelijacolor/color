@@ -383,7 +383,6 @@ function renderProject(slug) {
   if (i < 0) return false;
   const p = PROJECTS[i];
   const next = PROJECTS[(i + 1) % PROJECTS.length];
-  const desc = esc(`${p.format} shot on ${p.camera}.`);
   const festSum = festivalSummary(p);
 
   $("#view-project").innerHTML = `
@@ -404,7 +403,6 @@ function renderProject(slug) {
           <div><dt>Camera</dt><dd>${esc(p.camera)}</dd></div>
           ${festSum ? `<div><dt>Festivals</dt><dd>${esc(festSum)}</dd></div>` : ""}
         </dl>
-        <p class="pj-copy reveal">${desc}</p>
         ${p.notes ? `<p class="pj-copy reveal">${esc(p.notes)}</p>` : ""}
         ${p.laurels.length ? `<div class="pj-laurels reveal">${p.laurels.map(laurelRow).join("")}</div>` : ""}
       </div>
