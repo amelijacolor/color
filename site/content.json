@@ -85,48 +85,6 @@
   "projects": [
     {
       "festivals_won": 0,
-      "laurels": [],
-      "clips": [
-        "assets/videos/predator-clip-fd039923.mp4",
-        "assets/videos/predator-clip-a212b1df.mp4",
-        "assets/videos/predator-clip-b3396994.mp4",
-        "assets/videos/predator-clip-07f90678.mp4",
-        "assets/videos/predator-clip-fd264e9a.mp4"
-      ],
-      "roles": [
-        "Cinematography"
-      ],
-      "slug": "predator",
-      "title": "Predator",
-      "format": "Short Film",
-      "camera": "Sony FX9",
-      "poster": "assets/images/predator-cover-ee6ff45f.jpg",
-      "preview": "assets/videos/predator-preview-a718f629.mp4",
-      "notes": ""
-    },
-    {
-      "festivals_won": 0,
-      "laurels": [],
-      "clips": [
-        "assets/videos/natural-order-of-things-clip-e78ac96c.mp4",
-        "assets/videos/natural-order-of-things-clip-0bc922f6.mp4",
-        "assets/videos/natural-order-of-things-clip-5c465df3.mp4",
-        "assets/videos/natural-order-of-things-clip-3e04e886.mp4",
-        "assets/videos/natural-order-of-things-clip-12276475.mp4"
-      ],
-      "roles": [
-        "Cinematographer"
-      ],
-      "slug": "natural-order-of-things",
-      "title": "Natural Order of Things",
-      "format": "Short Film",
-      "camera": "Arri Alexa Amira",
-      "poster": "assets/images/natural-order-of-things-cover-ef76fd0b.jpg",
-      "preview": "assets/videos/natural-order-of-things-preview-12b20b74.mp4",
-      "notes": ""
-    },
-    {
-      "festivals_won": 0,
       "laurels": [
         {
           "festival": "Citylights Film Festival",
@@ -295,21 +253,40 @@
       "festivals_won": 0,
       "laurels": [],
       "clips": [
-        "assets/videos/lucifer-clip-d37bfe65.mp4",
-        "assets/videos/lucifer-clip-bf884391.mp4",
-        "assets/videos/lucifer-clip-b7d79a1f.mp4",
-        "assets/videos/lucifer-clip-7b5ddf3c.mp4"
+        "assets/videos/natural-order-of-things-clip-e78ac96c.mp4",
+        "assets/videos/natural-order-of-things-clip-0bc922f6.mp4",
+        "assets/videos/natural-order-of-things-clip-5c465df3.mp4",
+        "assets/videos/natural-order-of-things-clip-12276475.mp4"
       ],
       "roles": [
-        "Cinematography",
-        "Colorist"
+        "Cinematographer"
       ],
-      "slug": "lucifer",
-      "title": "Lucifer",
-      "format": "Music Video",
-      "camera": "Blackmagic Pocket 6K",
-      "poster": "assets/images/lucifer-cover-9d89393c.png",
-      "preview": "assets/videos/lucifer-preview-44628120.mp4",
+      "slug": "natural-order-of-things",
+      "title": "Natural Order of Things",
+      "format": "Short Film",
+      "camera": "Arri Alexa Amira",
+      "poster": "assets/images/natural-order-of-things-cover-ef76fd0b.jpg",
+      "preview": "assets/videos/natural-order-of-things-preview-12b20b74.mp4",
+      "notes": ""
+    },
+    {
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/predator-clip-9fa7a776.mp4",
+        "assets/videos/predator-clip-ad13d626.mp4",
+        "assets/videos/predator-clip-07f90678.mp4",
+        "assets/videos/predator-clip-fd264e9a.mp4"
+      ],
+      "roles": [
+        "Cinematography"
+      ],
+      "slug": "predator",
+      "title": "Predator",
+      "format": "Short Film",
+      "camera": "Sony FX9",
+      "poster": "assets/images/predator-cover-7600a2c0.jpg",
+      "preview": "assets/videos/predator-preview-1043f19c.mp4",
       "notes": ""
     },
     {
@@ -330,6 +307,27 @@
       "camera": "16mm Film",
       "poster": "assets/images/final-card-cover-e196d179.jpg",
       "preview": "assets/videos/final-card-preview-e7781346.mp4",
+      "notes": ""
+    },
+    {
+      "festivals_won": 0,
+      "laurels": [],
+      "clips": [
+        "assets/videos/lucifer-clip-d37bfe65.mp4",
+        "assets/videos/lucifer-clip-bf884391.mp4",
+        "assets/videos/lucifer-clip-b7d79a1f.mp4",
+        "assets/videos/lucifer-clip-7b5ddf3c.mp4"
+      ],
+      "roles": [
+        "Cinematography",
+        "Colorist"
+      ],
+      "slug": "lucifer",
+      "title": "Lucifer",
+      "format": "Music Video",
+      "camera": "Blackmagic Pocket 6K",
+      "poster": "assets/images/lucifer-cover-9d89393c.png",
+      "preview": "assets/videos/lucifer-preview-44628120.mp4",
       "notes": ""
     }
   ],
